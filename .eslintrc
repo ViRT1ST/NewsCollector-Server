@@ -1,0 +1,23 @@
+{
+  "extends": "airbnb",
+
+  "env": {
+    "node": true
+  },
+
+  "rules": {
+    "linebreak-style": ["error", "windows"],
+    "import/newline-after-import": "off",
+    "object-curly-newline": "off",
+    "padded-blocks": "off",
+    "no-multiple-empty-lines": "off",
+    "no-underscore-dangle": "off",
+    "no-param-reassign": "off",
+    "no-console": "off",
+    "arrow-body-style": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "react/jsx-filename-extension": "off",
+    "react/require-default-props": "off",
+    "jsx-a11y/label-has-associated-control": "off"
+  }
+}
