@@ -41,7 +41,7 @@ app.use('/api/spider', spider);
 app.use('/api/users', users);
 
 /* ==================================== */
-/*   Run server                         */
+/*   Run server                        */
 /* ==================================== */
 
 const PORT = process.env.SERVER_PORT;
