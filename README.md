@@ -11,4 +11,5 @@ News Collector
 Выложено на GitHub чисто для портфолио.
 
 Скрины фронта (desktop & mobile)\
+\
 ![screenshot](screenshots/dark.png)
