@@ -1,4 +1,8 @@
 {
+  "parserOptions": {
+    "ecmaVersion": 2022
+  },
+  
   "extends": "airbnb",
 
   "env": {
@@ -6,18 +10,37 @@
   },
 
   "rules": {
-    "linebreak-style": ["error", "windows"],
+    "arrow-body-style": "off",
+    "camelcase": "off",
+    "class-methods-use-this": "off",
+    "comma-dangle": "off",
     "import/newline-after-import": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/control-has-associated-label": "off",
+    "jsx-a11y/label-has-associated-control": "off",
+    "jsx-a11y/no-noninteractive-tabindex": "off",
+    "linebreak-style": ["error", "windows"],
+    "no-await-in-loop": "off",
+    "no-console": "off",
+    "no-constant-condition": "off",
+    "no-multiple-empty-lines": "off",
+    "no-param-reassign": "off",
+    "no-underscore-dangle": "off",
     "object-curly-newline": "off",
     "padded-blocks": "off",
-    "no-multiple-empty-lines": "off",
-    "no-underscore-dangle": "off",
-    "no-param-reassign": "off",
-    "no-console": "off",
-    "arrow-body-style": "off",
-    "react/jsx-one-expression-per-line": "off",
+    "prefer-destructuring": "off",
     "react/jsx-filename-extension": "off",
+    "react/jsx-fragments": "off",
+    "react/jsx-no-target-blank": "off",
+    "react/jsx-one-expression-per-line": "off",
     "react/require-default-props": "off",
-    "jsx-a11y/label-has-associated-control": "off"
+    "react/state-in-constructor": "off",
+    "func-names": "off",
+    "no-unused-expressions": "off",
+    "no-useless-escape": "off",
+    "no-unused-vars": "off",
+    "quote-props": "off",
+    "key-spacing": "off",
+    "prefer-const": "off"
   }
 }
