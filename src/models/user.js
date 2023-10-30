@@ -30,7 +30,7 @@ userSchema.methods.toJSON = function () {
 };
 
 // Generate token and update array with allowed tokens
-userSchema.methods.generateAuthToken = async function () {
+userSchema.methods.generateAndSaveToken = async function () {
   const nowDateInSeconds = Math.floor(Date.now() / 1000);
   const exp = nowDateInSeconds + parseInt(process.env.JWT_EXP_SECONDS, 10);
 

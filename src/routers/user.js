@@ -29,7 +29,7 @@ router.post('/users', async (req, res, next) => {
     const user = new User({ email, password });
     await user.save();
 
-    const token = await user.generateAuthToken();
+    const token = await user.generateAndSaveToken();
 
     sendSuccessResponse(201, { user, token }, res);
   } catch (error) {
@@ -50,7 +50,7 @@ router.post('/users/login', async (req, res, next) => {
 
     ET.checkPasswordIsCorrect(password, user.password);
 
-    const token = await user.generateAuthToken();
+    const token = await user.generateAndSaveToken();
 
     sendSuccessResponse(200, { user, token }, res);
   } catch (error) {

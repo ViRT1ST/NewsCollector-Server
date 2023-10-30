@@ -10,8 +10,7 @@ const sources = [
     removeInTitle: '— Индустрия на DTF',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf839'),
@@ -22,8 +21,7 @@ const sources = [
     removeInTitle: '— Игры на DTF',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf838'),
@@ -34,8 +32,7 @@ const sources = [
     removeInTitle: '— Гайды на DTF',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf837'),
@@ -46,8 +43,7 @@ const sources = [
     removeInTitle: '— Жизнь на DTF',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf836'),
@@ -58,8 +54,7 @@ const sources = [
     removeInTitle: '— Железо на DTF',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf835'),
@@ -70,8 +65,7 @@ const sources = [
     removeInTitle: '— Скидки на DTF',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf834'),
@@ -82,8 +76,7 @@ const sources = [
     removeInTitle: '— Кино и сериалы на DTF',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf833'),
@@ -94,8 +87,7 @@ const sources = [
     removeInTitle: '— Gamedev на DTF',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf832'),
@@ -106,8 +98,7 @@ const sources = [
     removeInTitle: '— Скриншоты на DTF',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf831'),
@@ -118,8 +109,7 @@ const sources = [
     removeInTitle: '— Автоспорт на DTF',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf830'),
@@ -130,8 +120,7 @@ const sources = [
     removeInTitle: '— Вопросы на DTF',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf829'),
@@ -142,8 +131,7 @@ const sources = [
     removeInTitle: '— PlayStation на DTF',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf828'),
@@ -154,8 +142,7 @@ const sources = [
     removeInTitle: '— Все, что связанно с VR и AR на DTF',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf827'),
@@ -166,8 +153,7 @@ const sources = [
     removeInTitle: '/ NONE',
     parsingMethod: 'rss',
     translateTitle: true,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf826'),
@@ -178,8 +164,7 @@ const sources = [
     removeInTitle: '- VideoCardz.com',
     parsingMethod: 'html',
     translateTitle: true,
-    enabled: true,
-    subscribers: []
+    enabled: true
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf825'),
@@ -190,8 +175,7 @@ const sources = [
     removeInTitle: 'Overclockers.ru:',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf824'),
@@ -202,8 +186,7 @@ const sources = [
     removeInTitle: 'Overclockers.ru:',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf823'),
@@ -214,8 +197,7 @@ const sources = [
     removeInTitle: '- Shazoo',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: true,
-    subscribers: []
+    enabled: true
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf822'),
@@ -226,8 +208,7 @@ const sources = [
     removeInTitle: '- новости на Tengrinews.kz',
     parsingMethod: 'tengri',
     translateTitle: false,
-    enabled: true,
-    subscribers: []
+    enabled: true
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf821'),
@@ -238,8 +219,7 @@ const sources = [
     removeInTitle: '/ Хабр',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf820'),
@@ -250,8 +230,7 @@ const sources = [
     removeInTitle: '/ Хабр',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf819'),
@@ -262,8 +241,7 @@ const sources = [
     removeInTitle: '/ Хабр',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf818'),
@@ -274,8 +252,7 @@ const sources = [
     removeInTitle: '/ Хабр',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf817'),
@@ -286,8 +263,7 @@ const sources = [
     removeInTitle: '/ Хабр',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf816'),
@@ -298,8 +274,7 @@ const sources = [
     removeInTitle: '/ Хабр',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf815'),
@@ -310,8 +285,7 @@ const sources = [
     removeInTitle: '/ Хабр',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf814'),
@@ -322,8 +296,7 @@ const sources = [
     removeInTitle: '/ Хабр',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf813'),
@@ -334,8 +307,7 @@ const sources = [
     removeInTitle: '/ Хабр',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf812'),
@@ -346,8 +318,7 @@ const sources = [
     removeInTitle: '/ Хабр',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf811'),
@@ -358,8 +329,7 @@ const sources = [
     removeInTitle: '/ Хабр',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf810'),
@@ -370,8 +340,7 @@ const sources = [
     removeInTitle: '/ Хабр',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf809'),
@@ -382,8 +351,7 @@ const sources = [
     removeInTitle: '/ Хабр',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf808'),
@@ -394,8 +362,7 @@ const sources = [
     removeInTitle: '/ Хабр',
     parsingMethod: 'rss',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf807'),
@@ -406,8 +373,7 @@ const sources = [
     removeInTitle: '– Kwork',
     parsingMethod: 'kwork',
     translateTitle: false,
-    enabled: true,
-    subscribers: []
+    enabled: true
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf806'),
@@ -418,8 +384,7 @@ const sources = [
     removeInTitle: '– Kwork',
     parsingMethod: 'kwork',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf805'),
@@ -430,8 +395,7 @@ const sources = [
     removeInTitle: '– Kwork',
     parsingMethod: 'kwork',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf804'),
@@ -442,8 +406,7 @@ const sources = [
     removeInTitle: '– Kwork',
     parsingMethod: 'kwork',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf803'),
@@ -454,8 +417,7 @@ const sources = [
     removeInTitle: '– Kwork',
     parsingMethod: 'kwork',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf802'),
@@ -466,8 +428,7 @@ const sources = [
     removeInTitle: '– Kwork',
     parsingMethod: 'kwork',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   },
   {
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf801'),
@@ -478,8 +439,7 @@ const sources = [
     removeInTitle: '– Kwork',
     parsingMethod: 'kwork',
     translateTitle: false,
-    enabled: false,
-    subscribers: []
+    enabled: false
   }
 ];
 
