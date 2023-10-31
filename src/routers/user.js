@@ -3,6 +3,7 @@ const { Types: { ObjectId } } = require('mongoose');
 
 const Article = require('../models/article');
 const User = require('../models/user');
+const Source = require('../models/source');
 const auth = require('../middleware/auth');
 const sendSuccessResponse = require('../responses/success');
 const ET = require('../errors/thrower');
@@ -85,8 +86,16 @@ router.post('/users/logout-all', auth, async (req, res, next) => {
 });
 
 router.get('/users/me', auth, async (req, res) => {
-  const { user } = req;
-  sendSuccessResponse(200, req.user, res);
+  const { email, _id: userId, subscriptions: userSubscriptions } = req.user;
+
+  const sources = await Source.find({ enabled: true });
+
+  const subscriptions = sources.map(({ _id, site, section }) => {
+    const isSubscribed = userSubscriptions.includes(_id);
+    return { _id, site, section, isSubscribed };
+  });
+
+  sendSuccessResponse(200, { _id: userId, email, subscriptions }, res);
 });
 
 router.patch('/users/me', auth, async (req, res, next) => {
@@ -131,6 +140,5 @@ router.delete('/users/me', auth, async (req, res, next) => {
     next(error);
   }
 });
-
 
 module.exports = router;

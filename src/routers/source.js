@@ -11,7 +11,7 @@ router.get('/sources', auth, async (req, res, next) => {
   const { user } = req;
 
   try {
-    // ET.checkUserIsAdmin(user);
+    ET.checkUserIsAdmin(user);
 
     const find = { enabled: true };
     const sort = { site: 'asc', section: 'asc' };
