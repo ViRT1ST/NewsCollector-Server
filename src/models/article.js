@@ -31,7 +31,11 @@ articleSchema.pre('save', async function (next) {
   const condition = { subscriptions: { $in: this.sourceId } };
   const subscribersToSource = await User.find(condition);
 
-  this.unreadedBy = subscribersToSource.map((user) => user._id);
+  // fill unreadedBy by subscribers that don't have banned keywords in title
+  const title = this.title.toLowerCase();
+  this.unreadedBy = subscribersToSource
+    .filter((user) => !user.bannedStrings.some((s) => title.includes(s)))
+    .map((user) => user._id);
 
   next();
 });

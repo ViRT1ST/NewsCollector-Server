@@ -88,7 +88,9 @@ router.post('/users/logout-all', auth, async (req, res, next) => {
 router.get('/users/me', auth, async (req, res) => {
   const { email, _id: userId, subscriptions: userSubscriptions } = req.user;
 
-  const sources = await Source.find({ enabled: true });
+  const find = { enabled: true };
+  const sort = { site: 'asc', section: 'asc' };
+  const sources = await Source.find(find).sort(sort);
 
   const subscriptions = sources.map(({ _id, site, section }) => {
     const isSubscribed = userSubscriptions.includes(_id);
