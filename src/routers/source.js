@@ -15,9 +15,9 @@ router.get('/sources', auth, async (req, res, next) => {
 
     const find = { enabled: true };
     const sort = { site: 'asc', section: 'asc' };
-    const subscriptions = await Source.find(find).sort(sort);
+    const sources = await Source.find(find).sort(sort);
 
-    sendSuccessResponse(200, subscriptions, res);
+    sendSuccessResponse(200, sources, res);
   } catch (error) {
     next(error);
   }

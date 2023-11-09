@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
   password:       { type: String, required: true, trim: true },
   admin:          { type: Boolean, default: false },
   subscriptions:  [{ type: mongoose.Schema.Types.ObjectId, ref: 'Source' }],
+  bannedStrings:  [{ type: String, required: true }],
   tokens:         [{ type: String, required: true }],
 }, {
   timestamps: true,
@@ -20,6 +21,7 @@ userSchema.methods.toJSON = function () {
     emailLowercase,
     password,
     admin,
+    bannedStrings,
     tokens,
     createdAt,
     updatedAt,
