@@ -99,4 +99,24 @@ router.patch('/articles/:id/hide', auth, async (req, res, next) => {
   }
 });
 
+router.delete('/articles/months/:qty', auth, async (req, res, next) => {
+  const { params: { qty }, user } = req;
+
+  try {
+    ET.checkUserIsAdmin(user);
+
+    const months = parseInt(qty, 10);
+    ET.checkNumberIsFitting('Number of months', months, 1);
+
+    const unixDate = new Date().setMonth(new Date().getMonth() - months);
+
+    const condition = { createdAt: { $lte: new Date(unixDate) } };
+    const { deletedCount } = await Article.deleteMany(condition);
+
+    sendSuccessResponse(200, { deletedCount }, res);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

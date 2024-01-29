@@ -110,7 +110,7 @@ router.patch('/users/me', auth, async (req, res, next) => {
     await ET.checkAlowedFieldsAreProvided(allowedFields, providedFields);
 
     email && ET.checkEmailIsValid(email);
-    email && ET.checkIsEmailBelongToUser(email, user);
+    // email && ET.checkIsEmailBelongToUser(email, user);
     password && ET.checkStringIsFitting('Password', password, 8);
     subscriptions && ET.checkArrayIsArray(subscriptions);
 

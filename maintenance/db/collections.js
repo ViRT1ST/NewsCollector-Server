@@ -445,7 +445,7 @@ const sources = [
     _id: new mongoose.Types.ObjectId('653c0e405c01c8a5f7fcf901'),
     site: 'Freelancer',
     section: 'Selected Skills',
-    url: 'https://www.freelancer.com/jobs/nodejs_windows_web-scraping_data-collection/',
+    url: 'https://www.freelancer.com/jobs/nodejs_windows_web-scraping_javascript_expressjs_api_mongodb/?results=100&languages=en,ru',
     regex: '^.*?freelancer.com\/projects\/.*?\/.*?$',
     removeInTitle: '| Freelancer',
     parsingMethod: 'html',

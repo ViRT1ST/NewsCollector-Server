@@ -47,7 +47,7 @@ class ErrorThrower {
 
   static checkUserIsAdmin(user) {
     if (!user || !user.admin) {
-      throwError(403, 'You do not have permission to post articles');
+      throwError(403, 'You do not have permission to this action');
     }
   }
 
