@@ -29,7 +29,7 @@ export const POST = async (request, { params }) => {
     const newToken = generateToken(user._id);
 
     // remove oldest token if user have 10 tokens
-    const oldTokens = user.tokens.length === 10
+    const oldTokens = user.tokens.length > 9
       ? user.tokens.slice(1)
       : user.tokens;
 

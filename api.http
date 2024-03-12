@@ -2,7 +2,7 @@
 # Variables
 # ================================================
 
-@nextApiUrl = http://localhost:3000/api
+@nextApiUrl = http://localhost:7733/api
 
 @nextUser = games@gmail.com
 @nextPassword = 640480zZ
@@ -129,7 +129,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc3NTIxM
 
 GET {{nextApiUrl}}/articles/urls
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc3NTIxMjQsIl9pZCI6IjY1M2MwY2Y0NWVlNmNjMjU3OWZmMzQwNCIsImlhdCI6MTcwOTk3NjEyNH0.Ty4h3MMlnoi8MQzQl-L3rwW__Ls1C2DxPtujwLmb7Qs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTgwNDM2MjcsIl9pZCI6IjY1M2MwY2Y0NWVlNmNjMjU3OWZmMzQwNCIsImlhdCI6MTcxMDI2NzYyN30.A53btzjiGfnqMyJZkG-9BhTOjvkfaAt6iTKahtNQVTU
 
 ### ==============================================
 # Articles | Delete old articles (only for spider) 
@@ -145,4 +145,4 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc3NTIxM
 
 GET {{nextApiUrl}}/sources
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc3NTIxMjQsIl9pZCI6IjY1M2MwY2Y0NWVlNmNjMjU3OWZmMzQwNCIsImlhdCI6MTcwOTk3NjEyNH0.Ty4h3MMlnoi8MQzQl-L3rwW__Ls1C2DxPtujwLmb7Qs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTgwNDM2MjcsIl9pZCI6IjY1M2MwY2Y0NWVlNmNjMjU3OWZmMzQwNCIsImlhdCI6MTcxMDI2NzYyN30.A53btzjiGfnqMyJZkG-9BhTOjvkfaAt6iTKahtNQVTU
