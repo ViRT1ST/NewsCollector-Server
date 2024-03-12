@@ -1,0 +1,148 @@
+# ================================================
+# Variables
+# ================================================
+
+@nextApiUrl = http://localhost:3000/api
+
+@nextUser = games@gmail.com
+@nextPassword = 640480zZ
+
+### ==============================================
+# User | Create account by login:pass
+# ================================================
+
+POST {{nextApiUrl}}/users
+Content-Type: application/json
+{
+  "email": "demy777@outlook.com",
+  "password": "password123!7778"
+}
+
+### ==============================================
+# User | Login by login:pass
+# ================================================
+
+POST {{nextApiUrl}}/users/login
+Content-Type: application/json
+{
+  "email": "games@gmail.com",
+  "password": "640480zZ"
+}
+
+### ==============================================
+# User | Logout (delete current token)
+# ================================================
+
+POST {{nextApiUrl}}/users/logout
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc2OTEwNzcsIl9pZCI6IjY1M2U4NTRjODdmNTIyY2Q5OGI0ODA5NSIsImlhdCI6MTcwOTkxNTA3N30.CLIk4bxB5vxBGAjz0T13ezrI0Q71g3QOzEtkV-C4Y2A
+
+### ==============================================
+# User | Logout (delete all tokens)
+# ================================================
+
+POST {{nextApiUrl}}/users/logout-all
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc2ODY0NDcsIl9pZCI6IjY1M2U4NTRjODdmNTIyY2Q5OGI0ODA5NSIsImlhdCI6MTcwOTkxMDQ0N30.Tfg8L12CQ-z0xJ0EO_IXDXqMBTFjWd_JzkhsHIrumuE
+
+### ==============================================
+# User | Delete
+# ================================================
+
+DELETE {{nextApiUrl}}/users/me
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc2OTcwOTAsIl9pZCI6IjY1ZWI1MzQyMGJmYTMwZTRiNzk0MjY0MCIsImlhdCI6MTcwOTkyMTA5MH0.Aw6iEhMYhg4N0Zkdr0GzFi622QDUhde8-8c6puesHw8
+
+### ==============================================
+# User | Change data
+# ================================================
+
+PATCH {{nextApiUrl}}/users/me
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc2OTcxMzYsIl9pZCI6IjY1ZWI1MzcwMGJmYTMwZTRiNzk0MjY0NSIsImlhdCI6MTcwOTkyMTEzNn0.6pMydZDAElfdh6qw2Yjjr-7mbSLDR7tJiKddBG_NUIg
+{
+  "email": "demy777@outlook.com",
+  "password": "password123!7778",
+  "subscriptions": ["653c0e405c01c8a5f7fcf838"]
+}
+
+### ==============================================
+# User | Get info
+# ================================================
+
+GET {{nextApiUrl}}/users/me
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc2OTcxMzYsIl9pZCI6IjY1ZWI1MzcwMGJmYTMwZTRiNzk0MjY0NSIsImlhdCI6MTcwOTkyMTEzNn0.6pMydZDAElfdh6qw2Yjjr-7mbSLDR7tJiKddBG_NUIg
+
+### ==============================================
+# Articles | Get unreaded
+# ================================================
+
+GET {{nextApiUrl}}/articles?find=unreaded
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc3NTk0NDcsIl9pZCI6IjY1M2U4NTRjODdmNTIyY2Q5OGI0ODA5NSIsImlhdCI6MTcwOTk4MzQ0N30.U9IGR7CXujenK493WxWZMDDghZY2Ih5EXyNGn2NL6Go
+
+### ==============================================
+# Articles | Get saved
+# ================================================
+
+GET {{nextApiUrl}}/articles?find=saved
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc3NTk0NDcsIl9pZCI6IjY1M2U4NTRjODdmNTIyY2Q5OGI0ODA5NSIsImlhdCI6MTcwOTk4MzQ0N30.U9IGR7CXujenK493WxWZMDDghZY2Ih5EXyNGn2NL6Go
+
+### ==============================================
+# Articles | Save 
+# ================================================
+
+PATCH {{nextApiUrl}}/articles/656589405777bf85abf62744/save
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc2OTExMjQsIl9pZCI6IjY1M2U4NTRjODdmNTIyY2Q5OGI0ODA5NSIsImlhdCI6MTcwOTkxNTEyNH0.ygIqqe-QNHhpubPcGeL4atzRzXIrwghtnT1TP9a0l5s
+
+### ==============================================
+# Articles | Delete 
+# ================================================
+
+PATCH {{nextApiUrl}}/articles/656589405777bf85abf62744/hide
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc2OTExMjQsIl9pZCI6IjY1M2U4NTRjODdmNTIyY2Q5OGI0ODA5NSIsImlhdCI6MTcwOTkxNTEyNH0.ygIqqe-QNHhpubPcGeL4atzRzXIrwghtnT1TP9a0l5s
+
+### ==============================================
+# Articles | Create (only for spider) 
+# ================================================
+
+POST {{nextApiUrl}}/articles
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc3NTIxMjQsIl9pZCI6IjY1M2MwY2Y0NWVlNmNjMjU3OWZmMzQwNCIsImlhdCI6MTcwOTk3NjEyNH0.Ty4h3MMlnoi8MQzQl-L3rwW__Ls1C2DxPtujwLmb7Qs
+[
+  {
+    "url": "https://dtf.ru/gameindustry/2450461",
+    "title": "Fortnite вернётся на iOS",
+    "site": "DTF",
+    "section": "Индустрия",
+    "sourceId": "653c0e405c01c8a5f7fcf840"
+  }
+]
+
+### ==============================================
+# Articles | Get all urls (only for spider) 
+# ================================================
+
+GET {{nextApiUrl}}/articles/urls
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc3NTIxMjQsIl9pZCI6IjY1M2MwY2Y0NWVlNmNjMjU3OWZmMzQwNCIsImlhdCI6MTcwOTk3NjEyNH0.Ty4h3MMlnoi8MQzQl-L3rwW__Ls1C2DxPtujwLmb7Qs
+
+### ==============================================
+# Articles | Delete old articles (only for spider) 
+# ================================================
+
+DELETE {{nextApiUrl}}/articles?months=2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc3NTIxMjQsIl9pZCI6IjY1M2MwY2Y0NWVlNmNjMjU3OWZmMzQwNCIsImlhdCI6MTcwOTk3NjEyNH0.Ty4h3MMlnoi8MQzQl-L3rwW__Ls1C2DxPtujwLmb7Qs
+
+### ==============================================
+# Sources | Get list (only for spider) 
+# ================================================
+
+GET {{nextApiUrl}}/sources
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc3NTIxMjQsIl9pZCI6IjY1M2MwY2Y0NWVlNmNjMjU3OWZmMzQwNCIsImlhdCI6MTcwOTk3NjEyNH0.Ty4h3MMlnoi8MQzQl-L3rwW__Ls1C2DxPtujwLmb7Qs
