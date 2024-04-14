@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: false,
   experimental: {
-    instrumentationHook: true,
+    instrumentationHook: false,
   },
 };
 

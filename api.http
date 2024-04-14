@@ -3,30 +3,29 @@
 # ================================================
 
 @nextApiUrl = http://localhost:7733/api
-
-@nextUser = games@gmail.com
-@nextPassword = 640480zZ
+@nextApiUser = jennifer@gmail.com
+@nextApiPassword = password123!
 
 ### ==============================================
-# User | Create account by login:pass
+# User | Create account by email:pass
 # ================================================
 
 POST {{nextApiUrl}}/users
 Content-Type: application/json
 {
-  "email": "demy777@outlook.com",
-  "password": "password123!7778"
+  "email": "test@gmail.com",
+  "password": "password123!"
 }
 
 ### ==============================================
-# User | Login by login:pass
+# User | Login by email:pass
 # ================================================
 
 POST {{nextApiUrl}}/users/login
 Content-Type: application/json
 {
-  "email": "games@gmail.com",
-  "password": "640480zZ"
+  "email": "grogu@gmail.com",
+  "password": "password123!"
 }
 
 ### ==============================================
@@ -35,7 +34,7 @@ Content-Type: application/json
 
 POST {{nextApiUrl}}/users/logout
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc2OTEwNzcsIl9pZCI6IjY1M2U4NTRjODdmNTIyY2Q5OGI0ODA5NSIsImlhdCI6MTcwOTkxNTA3N30.CLIk4bxB5vxBGAjz0T13ezrI0Q71g3QOzEtkV-C4Y2A
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzc0MmQyOTItOWQyYy00Y2FhLTk5YzAtNzRlNTM2ZjM3M2IxIiwiZXhwIjoxNzIwNzcwNTU4LCJpYXQiOjE3MTI5OTQ1NTh9.13LPovFXAe38JG7-8d7PkIrmnqByRPAF593e-ODoRc0
 
 ### ==============================================
 # User | Logout (delete all tokens)
@@ -43,7 +42,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc2OTEwN
 
 POST {{nextApiUrl}}/users/logout-all
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc2ODY0NDcsIl9pZCI6IjY1M2U4NTRjODdmNTIyY2Q5OGI0ODA5NSIsImlhdCI6MTcwOTkxMDQ0N30.Tfg8L12CQ-z0xJ0EO_IXDXqMBTFjWd_JzkhsHIrumuE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzc0MmQyOTItOWQyYy00Y2FhLTk5YzAtNzRlNTM2ZjM3M2IxIiwiZXhwIjoxNzIwNzcwMzg5LCJpYXQiOjE3MTI5OTQzODl9.aMG7Cq2MJ3yZJZZY4HFtzSycLovdlj3JBlI7qGZkpdg
 
 ### ==============================================
 # User | Delete
@@ -51,7 +50,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc2ODY0N
 
 DELETE {{nextApiUrl}}/users/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc2OTcwOTAsIl9pZCI6IjY1ZWI1MzQyMGJmYTMwZTRiNzk0MjY0MCIsImlhdCI6MTcwOTkyMTA5MH0.Aw6iEhMYhg4N0Zkdr0GzFi622QDUhde8-8c6puesHw8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZWM1YzlmNDQtODc2Ny00MjQxLThhNzctYmY3MzI4MTQyOTY1IiwiZXhwIjoxNzIwNzcwNzI3LCJpYXQiOjE3MTI5OTQ3Mjd9.tBAt9i6VxbB6_SguuNwJh5CkNOYp7BM3gvX3Z_mMRvI
 
 ### ==============================================
 # User | Change data
@@ -59,11 +58,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc2OTcwO
 
 PATCH {{nextApiUrl}}/users/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc2OTcxMzYsIl9pZCI6IjY1ZWI1MzcwMGJmYTMwZTRiNzk0MjY0NSIsImlhdCI6MTcwOTkyMTEzNn0.6pMydZDAElfdh6qw2Yjjr-7mbSLDR7tJiKddBG_NUIg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlYWQtYmM3Zi00NTVmLTgyZGYtZGE0NWQzOWRjZDdhIiwiZXhwIjoxNzIwNzcwNDA3LCJpYXQiOjE3MTI5OTQ0MDd9.Ebj0r0CFWCHqzmnc07Tk2HN4wo1ALNDgq_ImDbrDRWs
 {
-  "email": "demy777@outlook.com",
-  "password": "password123!7778",
-  "subscriptions": ["653c0e405c01c8a5f7fcf838"]
+  "new_email": "JohnWoo@gmail.com",
+  "new_password": "password123!",
+  "new_subscriptions": ["ea12cd10-be78-49f6-b10a-0e1640b8e40f", "9d0aee7c-9bb9-450c-b073-28c91289ec8a"]
 }
 
 ### ==============================================
@@ -72,7 +71,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc2OTcxM
 
 GET {{nextApiUrl}}/users/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc2OTcxMzYsIl9pZCI6IjY1ZWI1MzcwMGJmYTMwZTRiNzk0MjY0NSIsImlhdCI6MTcwOTkyMTEzNn0.6pMydZDAElfdh6qw2Yjjr-7mbSLDR7tJiKddBG_NUIg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlYWQtYmM3Zi00NTVmLTgyZGYtZGE0NWQzOWRjZDdhIiwiZXhwIjoxNzIwNzcwNDA3LCJpYXQiOjE3MTI5OTQ0MDd9.Ebj0r0CFWCHqzmnc07Tk2HN4wo1ALNDgq_ImDbrDRWs
 
 ### ==============================================
 # Articles | Get unreaded
@@ -80,7 +79,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc2OTcxM
 
 GET {{nextApiUrl}}/articles?find=unreaded
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc3NTk0NDcsIl9pZCI6IjY1M2U4NTRjODdmNTIyY2Q5OGI0ODA5NSIsImlhdCI6MTcwOTk4MzQ0N30.U9IGR7CXujenK493WxWZMDDghZY2Ih5EXyNGn2NL6Go
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlYWQtYmM3Zi00NTVmLTgyZGYtZGE0NWQzOWRjZDdhIiwiZXhwIjoxNzIwNzcwNDA3LCJpYXQiOjE3MTI5OTQ0MDd9.Ebj0r0CFWCHqzmnc07Tk2HN4wo1ALNDgq_ImDbrDRWs
 
 ### ==============================================
 # Articles | Get saved
@@ -88,23 +87,23 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc3NTk0N
 
 GET {{nextApiUrl}}/articles?find=saved
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc3NTk0NDcsIl9pZCI6IjY1M2U4NTRjODdmNTIyY2Q5OGI0ODA5NSIsImlhdCI6MTcwOTk4MzQ0N30.U9IGR7CXujenK493WxWZMDDghZY2Ih5EXyNGn2NL6Go
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlYWQtYmM3Zi00NTVmLTgyZGYtZGE0NWQzOWRjZDdhIiwiZXhwIjoxNzIwNzcwNDA3LCJpYXQiOjE3MTI5OTQ0MDd9.Ebj0r0CFWCHqzmnc07Tk2HN4wo1ALNDgq_ImDbrDRWs
 
 ### ==============================================
-# Articles | Save 
+# Articles | Save it for user
 # ================================================
 
-PATCH {{nextApiUrl}}/articles/656589405777bf85abf62744/save
+PATCH {{nextApiUrl}}/articles/29be4f26-a61e-497b-96d9-50fd29e93a50/save
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc2OTExMjQsIl9pZCI6IjY1M2U4NTRjODdmNTIyY2Q5OGI0ODA5NSIsImlhdCI6MTcwOTkxNTEyNH0.ygIqqe-QNHhpubPcGeL4atzRzXIrwghtnT1TP9a0l5s
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlYWQtYmM3Zi00NTVmLTgyZGYtZGE0NWQzOWRjZDdhIiwiZXhwIjoxNzIwNzcwNDA3LCJpYXQiOjE3MTI5OTQ0MDd9.Ebj0r0CFWCHqzmnc07Tk2HN4wo1ALNDgq_ImDbrDRWs
 
 ### ==============================================
-# Articles | Delete 
+# Articles | Hide if from user 
 # ================================================
 
-PATCH {{nextApiUrl}}/articles/656589405777bf85abf62744/hide
+PATCH {{nextApiUrl}}/articles/29be4f26-a61e-497b-96d9-50fd29e93a50/hide
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc2OTExMjQsIl9pZCI6IjY1M2U4NTRjODdmNTIyY2Q5OGI0ODA5NSIsImlhdCI6MTcwOTkxNTEyNH0.ygIqqe-QNHhpubPcGeL4atzRzXIrwghtnT1TP9a0l5s
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlYWQtYmM3Zi00NTVmLTgyZGYtZGE0NWQzOWRjZDdhIiwiZXhwIjoxNzIwNzcwNDA3LCJpYXQiOjE3MTI5OTQ0MDd9.Ebj0r0CFWCHqzmnc07Tk2HN4wo1ALNDgq_ImDbrDRWs
 
 ### ==============================================
 # Articles | Create (only for spider) 
@@ -112,14 +111,21 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc2OTExM
 
 POST {{nextApiUrl}}/articles
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc3NTIxMjQsIl9pZCI6IjY1M2MwY2Y0NWVlNmNjMjU3OWZmMzQwNCIsImlhdCI6MTcwOTk3NjEyNH0.Ty4h3MMlnoi8MQzQl-L3rwW__Ls1C2DxPtujwLmb7Qs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlYWQtYmM3Zi00NTVmLTgyZGYtZGE0NWQzOWRjZDdhIiwiZXhwIjoxNzIwNzcwNDA3LCJpYXQiOjE3MTI5OTQ0MDd9.Ebj0r0CFWCHqzmnc07Tk2HN4wo1ALNDgq_ImDbrDRWs
 [
   {
-    "url": "https://dtf.ru/gameindustry/2450461",
-    "title": "Fortnite вернётся на iOS",
-    "site": "DTF",
-    "section": "Индустрия",
-    "sourceId": "653c0e405c01c8a5f7fcf840"
+    "url": "https://wccftech.com/helldivers-2-is-outselling-spider-man-2-in-the-united-kingdom/",
+    "title": "Helldivers 2 Is Outselling Spider-Man 2 in the United Kingdom",
+    "site": "Wccftech",
+    "section": "News",
+    "source_uuid": "9d0aee7c-9bb9-450c-b073-28c91289ec8a"
+  },
+    {
+    "url": "https://wccftech.com/real-life-pixel-8a-pictures-show-thick-bezels-and-a-rounded-design/",
+    "title": "Real-Life Pixel 8a Pictures Show Thick Bezels And A Rounded Design",
+    "site": "Wccftech",
+    "section": "News",
+    "source_uuid": "9d0aee7c-9bb9-450c-b073-28c91289ec8a"
   }
 ]
 
@@ -129,15 +135,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc3NTIxM
 
 GET {{nextApiUrl}}/articles/urls
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTgwNDM2MjcsIl9pZCI6IjY1M2MwY2Y0NWVlNmNjMjU3OWZmMzQwNCIsImlhdCI6MTcxMDI2NzYyN30.A53btzjiGfnqMyJZkG-9BhTOjvkfaAt6iTKahtNQVTU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlYWQtYmM3Zi00NTVmLTgyZGYtZGE0NWQzOWRjZDdhIiwiZXhwIjoxNzIwNzcwNDA3LCJpYXQiOjE3MTI5OTQ0MDd9.Ebj0r0CFWCHqzmnc07Tk2HN4wo1ALNDgq_ImDbrDRWs
 
 ### ==============================================
 # Articles | Delete old articles (only for spider) 
 # ================================================
 
-DELETE {{nextApiUrl}}/articles?months=2
+DELETE {{nextApiUrl}}/articles?months=1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc3NTIxMjQsIl9pZCI6IjY1M2MwY2Y0NWVlNmNjMjU3OWZmMzQwNCIsImlhdCI6MTcwOTk3NjEyNH0.Ty4h3MMlnoi8MQzQl-L3rwW__Ls1C2DxPtujwLmb7Qs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlYWQtYmM3Zi00NTVmLTgyZGYtZGE0NWQzOWRjZDdhIiwiZXhwIjoxNzIwNzcwNDA3LCJpYXQiOjE3MTI5OTQ0MDd9.Ebj0r0CFWCHqzmnc07Tk2HN4wo1ALNDgq_ImDbrDRWs
 
 ### ==============================================
 # Sources | Get list (only for spider) 
@@ -145,4 +151,4 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc3NTIxM
 
 GET {{nextApiUrl}}/sources
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTgwNDM2MjcsIl9pZCI6IjY1M2MwY2Y0NWVlNmNjMjU3OWZmMzQwNCIsImlhdCI6MTcxMDI2NzYyN30.A53btzjiGfnqMyJZkG-9BhTOjvkfaAt6iTKahtNQVTU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlYWQtYmM3Zi00NTVmLTgyZGYtZGE0NWQzOWRjZDdhIiwiZXhwIjoxNzIwNzcwNDA3LCJpYXQiOjE3MTI5OTQ0MDd9.Ebj0r0CFWCHqzmnc07Tk2HN4wo1ALNDgq_ImDbrDRWs

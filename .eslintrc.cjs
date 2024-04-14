@@ -2,14 +2,9 @@ module.exports = {
   root: true,
   env: { browser: true, es2020: true, node: true },
   extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:react/jsx-runtime',
-    'plugin:react-hooks/recommended',
+    'next/core-web-vitals',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
-  parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
-  settings: { react: { version: '18.2' } },
   rules: {
     'semi': [2, 'always'],
     // 'react-refresh/only-export-components': [ 'warn', { allowConstantExport: true }],
@@ -19,6 +14,7 @@ module.exports = {
     'react/prop-types': 'off',
     'no-unused-vars': 'off',
     'quotes': ['error', 'single', { 'allowTemplateLiterals': true } ],
-    'jsx-quotes': ['error', 'prefer-double']
+    'jsx-quotes': ['error', 'prefer-double'],
+    'import/no-anonymous-default-export': 'off'
   },
 }
