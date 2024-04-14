@@ -2,7 +2,12 @@ News Collector (Frontend/Backend Code)
 ==========================
 Персональный проект которым я пользуюсь для чтения новостей.
 
-Использованные технологии: Node.js, Next.js, TailwindCSS, Redux Toolkit, RTK Query, MongoDB
+Cтек технологий в текущей версии:
+ - Next.js, TypeScript, PostgreSQL, TailwindCSS, Node.js, Redux Toolkit, RTK Query
+
+Cтеки технологий в прошлых версиях:
+- React + Express, MongoDB, CSS/SASS
+- Python, Django, MySQL, Bootstrap
 
 Выложено для портфолио.
 
