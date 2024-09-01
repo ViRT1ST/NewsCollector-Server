@@ -7,10 +7,9 @@ module.exports = {
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   rules: {
     'semi': [2, 'always'],
-    // 'react-refresh/only-export-components': [ 'warn', { allowConstantExport: true }],
     'react/require-default-props': 'off',
     'react/jsx-no-target-blank': 'off',
-    'react-hooks/exhaustive-deps': 'off', // temp
+    'react-hooks/exhaustive-deps': 'off',
     'react/prop-types': 'off',
     'no-unused-vars': 'off',
     'quotes': ['error', 'single', { 'allowTemplateLiterals': true } ],

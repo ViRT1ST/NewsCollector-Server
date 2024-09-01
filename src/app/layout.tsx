@@ -1,6 +1,6 @@
 import { Open_Sans, Lato, Roboto } from 'next/font/google';
 
-import '@/assets/styles/globals.css';
+import './globals.css';
 
 const open_sans = Open_Sans({
   subsets: ['latin', 'cyrillic'],

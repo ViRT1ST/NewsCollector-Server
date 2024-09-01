@@ -19,9 +19,16 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "lib/backend/db/connect.js", "lib/backend/populate/run.js"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/lib/backend/db/connect.js",
+    "src/lib/backend/populate/run.js"
+  ],
   "exclude": ["node_modules"]
 }

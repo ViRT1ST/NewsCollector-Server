@@ -12,4 +12,4 @@ Cтеки технологий в прошлых версиях:
 Выложено для портфолио.
 
 #
-![screenshot](screenshots/dark.png)
+![screenshot](.screenshots/dark.png)

@@ -73,6 +73,7 @@ export default function AuthPage() {
         password: passwordRef.current.value
       };
   
+      // await?
       authUser(userInputData);
     }
   };
