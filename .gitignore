@@ -3,6 +3,7 @@
 # my files
 .\[PREVIOUS_VERSIONS\]/
 \[unused\]/
+.env
 
 # dependencies
 /node_modules

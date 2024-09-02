@@ -34,7 +34,7 @@ Content-Type: application/json
 
 POST {{nextApiUrl}}/users/logout
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzc0MmQyOTItOWQyYy00Y2FhLTk5YzAtNzRlNTM2ZjM3M2IxIiwiZXhwIjoxNzIwNzcwNTU4LCJpYXQiOjE3MTI5OTQ1NTh9.13LPovFXAe38JG7-8d7PkIrmnqByRPAF593e-ODoRc0
+Authorization: Bearer 
 
 ### ==============================================
 # User | Logout (delete all tokens)
@@ -42,7 +42,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzc0MmQyO
 
 POST {{nextApiUrl}}/users/logout-all
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzc0MmQyOTItOWQyYy00Y2FhLTk5YzAtNzRlNTM2ZjM3M2IxIiwiZXhwIjoxNzIwNzcwMzg5LCJpYXQiOjE3MTI5OTQzODl9.aMG7Cq2MJ3yZJZZY4HFtzSycLovdlj3JBlI7qGZkpdg
+Authorization: Bearer 
 
 ### ==============================================
 # User | Delete
@@ -50,7 +50,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzc0MmQyO
 
 DELETE {{nextApiUrl}}/users/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZWM1YzlmNDQtODc2Ny00MjQxLThhNzctYmY3MzI4MTQyOTY1IiwiZXhwIjoxNzIwNzcwNzI3LCJpYXQiOjE3MTI5OTQ3Mjd9.tBAt9i6VxbB6_SguuNwJh5CkNOYp7BM3gvX3Z_mMRvI
+Authorization: Bearer 
 
 ### ==============================================
 # User | Change data
@@ -58,7 +58,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZWM1YzlmN
 
 PATCH {{nextApiUrl}}/users/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlYWQtYmM3Zi00NTVmLTgyZGYtZGE0NWQzOWRjZDdhIiwiZXhwIjoxNzIwNzcwNDA3LCJpYXQiOjE3MTI5OTQ0MDd9.Ebj0r0CFWCHqzmnc07Tk2HN4wo1ALNDgq_ImDbrDRWs
+Authorization: Bearer 
 {
   "new_email": "JohnWoo@gmail.com",
   "new_password": "password123!",
@@ -71,7 +71,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlY
 
 GET {{nextApiUrl}}/users/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlYWQtYmM3Zi00NTVmLTgyZGYtZGE0NWQzOWRjZDdhIiwiZXhwIjoxNzIwNzcwNDA3LCJpYXQiOjE3MTI5OTQ0MDd9.Ebj0r0CFWCHqzmnc07Tk2HN4wo1ALNDgq_ImDbrDRWs
+Authorization: Bearer 
 
 ### ==============================================
 # Articles | Get unreaded
@@ -79,7 +79,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlY
 
 GET {{nextApiUrl}}/articles?find=unreaded
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlYWQtYmM3Zi00NTVmLTgyZGYtZGE0NWQzOWRjZDdhIiwiZXhwIjoxNzIwNzcwNDA3LCJpYXQiOjE3MTI5OTQ0MDd9.Ebj0r0CFWCHqzmnc07Tk2HN4wo1ALNDgq_ImDbrDRWs
+Authorization: Bearer 
 
 ### ==============================================
 # Articles | Get saved
@@ -87,7 +87,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlY
 
 GET {{nextApiUrl}}/articles?find=saved
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlYWQtYmM3Zi00NTVmLTgyZGYtZGE0NWQzOWRjZDdhIiwiZXhwIjoxNzIwNzcwNDA3LCJpYXQiOjE3MTI5OTQ0MDd9.Ebj0r0CFWCHqzmnc07Tk2HN4wo1ALNDgq_ImDbrDRWs
+Authorization: Bearer 
 
 ### ==============================================
 # Articles | Save it for user
@@ -95,7 +95,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlY
 
 PATCH {{nextApiUrl}}/articles/29be4f26-a61e-497b-96d9-50fd29e93a50/save
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlYWQtYmM3Zi00NTVmLTgyZGYtZGE0NWQzOWRjZDdhIiwiZXhwIjoxNzIwNzcwNDA3LCJpYXQiOjE3MTI5OTQ0MDd9.Ebj0r0CFWCHqzmnc07Tk2HN4wo1ALNDgq_ImDbrDRWs
+Authorization: Bearer 
 
 ### ==============================================
 # Articles | Hide if from user 
@@ -103,7 +103,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlY
 
 PATCH {{nextApiUrl}}/articles/29be4f26-a61e-497b-96d9-50fd29e93a50/hide
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlYWQtYmM3Zi00NTVmLTgyZGYtZGE0NWQzOWRjZDdhIiwiZXhwIjoxNzIwNzcwNDA3LCJpYXQiOjE3MTI5OTQ0MDd9.Ebj0r0CFWCHqzmnc07Tk2HN4wo1ALNDgq_ImDbrDRWs
+Authorization: Bearer 
 
 ### ==============================================
 # Articles | Create (only for spider) 
@@ -111,7 +111,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlY
 
 POST {{nextApiUrl}}/articles
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlYWQtYmM3Zi00NTVmLTgyZGYtZGE0NWQzOWRjZDdhIiwiZXhwIjoxNzIwNzcwNDA3LCJpYXQiOjE3MTI5OTQ0MDd9.Ebj0r0CFWCHqzmnc07Tk2HN4wo1ALNDgq_ImDbrDRWs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzc0MmQyOTItOWQyYy00Y2FhLTk5YzAtNzRlNTM2ZjM3M2IxIiwiZXhwIjoxNzI4NTc4MzQwLCJpYXQiOjE3MjA4MDIzNDB9.938iZzR-bef66IpaIIquTxipjopk1C3JuHaGkynuBBA 
 [
   {
     "url": "https://wccftech.com/helldivers-2-is-outselling-spider-man-2-in-the-united-kingdom/",
@@ -135,7 +135,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlY
 
 GET {{nextApiUrl}}/articles/urls
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlYWQtYmM3Zi00NTVmLTgyZGYtZGE0NWQzOWRjZDdhIiwiZXhwIjoxNzIwNzcwNDA3LCJpYXQiOjE3MTI5OTQ0MDd9.Ebj0r0CFWCHqzmnc07Tk2HN4wo1ALNDgq_ImDbrDRWs
+Authorization: Bearer 
 
 ### ==============================================
 # Articles | Delete old articles (only for spider) 
@@ -143,7 +143,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlY
 
 DELETE {{nextApiUrl}}/articles?months=1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlYWQtYmM3Zi00NTVmLTgyZGYtZGE0NWQzOWRjZDdhIiwiZXhwIjoxNzIwNzcwNDA3LCJpYXQiOjE3MTI5OTQ0MDd9.Ebj0r0CFWCHqzmnc07Tk2HN4wo1ALNDgq_ImDbrDRWs
+Authorization: Bearer 
 
 ### ==============================================
 # Sources | Get list (only for spider) 
@@ -151,4 +151,4 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlY
 
 GET {{nextApiUrl}}/sources
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzVmZGVlYWQtYmM3Zi00NTVmLTgyZGYtZGE0NWQzOWRjZDdhIiwiZXhwIjoxNzIwNzcwNDA3LCJpYXQiOjE3MTI5OTQ0MDd9.Ebj0r0CFWCHqzmnc07Tk2HN4wo1ALNDgq_ImDbrDRWs
+Authorization: Bearer 

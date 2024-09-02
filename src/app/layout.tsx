@@ -2,6 +2,10 @@ import { Open_Sans, Lato, Roboto } from 'next/font/google';
 
 import './globals.css';
 
+export const metadata = {
+  title: 'News Collector',
+};
+
 const open_sans = Open_Sans({
   subsets: ['latin', 'cyrillic'],
   weight: ['300'],
@@ -23,16 +27,19 @@ const roboto = Roboto({
   variable: '--font-roboto',
 });
 
-export const metadata = {
-  title: 'News Collector 6.0',
+const rootLayoutClasses = [
+  open_sans.variable,
+  lato.variable,
+  roboto.variable
+];
+
+type Props = {
+  children: React.ReactNode;
 };
 
-export default function RootLayout({ children } : { children: React.ReactNode }) {
+export default function RootLayout({ children } : Props) {
   return (
-    <html
-      lang="en"
-      className={`${open_sans.variable} ${lato.variable} ${roboto.variable}`}
-    >
+    <html lang="en" className={rootLayoutClasses.join(' ')}>
       <body>{children}</body>
     </html>
   );

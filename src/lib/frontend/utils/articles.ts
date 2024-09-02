@@ -1,5 +1,3 @@
-import React from 'react';
-
 function convertDateToAgo(time: Date | string) {
   const date = new Date(time);
   const now = new Date();

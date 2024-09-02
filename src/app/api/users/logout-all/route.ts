@@ -1,7 +1,7 @@
 import { headers } from 'next/headers';
 
-import { successResponse, errorResponse } from '@/lib/backend/responses';
-import pg from '@/lib/backend/postgres';
+import { successResponse, errorResponse } from '@/lib/api/responses';
+import pg from '@/lib/db/queries';
 
 export const dynamic = 'force-dynamic';
 

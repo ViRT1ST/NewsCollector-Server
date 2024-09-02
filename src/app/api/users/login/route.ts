@@ -1,9 +1,9 @@
-import { successResponse, errorResponse } from '@/lib/backend/responses';
+import { successResponse, errorResponse } from '@/lib/api/responses';
 
-import jwt from '@/lib/backend/utils/jsonwebtoken';
-import bcrypt from '@/lib/backend/utils/bcrypt';
-import validator from '@/lib/backend/validator';
-import pg from '@/lib/backend/postgres';
+import jwt from '@/lib/auth/jsonwebtoken';
+import bcrypt from '@/lib/auth/bcrypt';
+import validator from '@/lib/validator';
+import pg from '@/lib/db/queries';
 
 export const dynamic = 'force-dynamic';
 
