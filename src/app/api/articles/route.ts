@@ -2,7 +2,9 @@ import { headers } from 'next/headers';
 import { NextRequest } from 'next/server';
 
 import { successResponse, errorResponse } from '@/lib/api/responses';
-import validator from '@/lib/validator';
+import { ArrayOfArticlesFromSpiderSchema, PositiveNumberSchema } from '@/lib/types';
+import { ExtendedError } from '@/lib/errors';
+
 import pg from '@/lib/db/queries';
 
 export const dynamic = 'force-dynamic';
@@ -19,11 +21,13 @@ export const GET = async (req: NextRequest) => {
     const authToken = headers().get('authorization');
     const user = await pg.getUserByToken(authToken);
 
-    const searchParams = req.nextUrl.searchParams;
-    const isSavedBy = searchParams.get('find') === 'saved';
-    
+    if (!user) {
+      throw new ExtendedError(400, 'Invalid token. Please re-authenticate.');
+    }
+
+    const isSavedBy = req.nextUrl.searchParams.get('find') === 'saved';
     const articles = await pg.getArticlesForUser(user.uuid, isSavedBy);
-    
+
     return successResponse(200, articles);
 
   } catch (error) {
@@ -43,14 +47,22 @@ export const POST = async (req: Request) => {
     const authToken = headers().get('authorization');
     const user = await pg.getUserByToken(authToken);
 
-    validator.checkUserIsAdmin(user);
+    if (!user) {
+      throw new ExtendedError(400, 'Invalid token. Please re-authenticate.');
+    }
 
-    const body = await req.json();
+    if (!user.is_admin) {
+      throw new ExtendedError(403, 'You do not have permission to this action.');
+    }
 
-    const array = validator.assertArray(body);
-    const articles = array.map((item) => validator.assertSpiderArticle(item));
+    const articlesArray = await req.json();
 
-    await pg.insertArticles(articles);
+    const result = ArrayOfArticlesFromSpiderSchema.safeParse(articlesArray);
+    if (!result.success) {
+      throw new ExtendedError(400, 'Invalid articles array received');
+    }
+
+    await pg.insertArticles(result.data);
 
     return successResponse(201, null);
 
@@ -71,13 +83,19 @@ export const DELETE = async (req: NextRequest) => {
     const authToken = headers().get('authorization');
     const user = await pg.getUserByToken(authToken);
 
-    validator.checkUserIsAdmin(user);
+    if (!user) {
+      throw new ExtendedError(400, 'Invalid token. Please re-authenticate.');
+    }
 
-    const searchParams = req.nextUrl.searchParams;
-    const monthsParam = searchParams.get('months');
-    const months = validator.assertNumber(monthsParam);
+    const monthsParam = req.nextUrl.searchParams.get('months');
 
-    const count = await pg.deleteOldArticles(months);
+    const result = PositiveNumberSchema.safeParse(monthsParam);
+
+    if (!result.success) {
+      throw new ExtendedError(400, 'Invalid months param received');
+    }
+
+    const count = await pg.deleteOldArticles(result.data);
 
     return successResponse(200, { deleted_count: count });
 

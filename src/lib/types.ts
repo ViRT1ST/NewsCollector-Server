@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { asOptionalField } from '@/lib/utils/zod';
 
 /* =============================================================
 Database Full Schemas And Types
@@ -20,6 +21,8 @@ export const DbUserSchema = z.object({
 });
 
 export type DbUser = z.infer<typeof DbUserSchema>;
+
+export type DbUserOrUndef = DbUser | undefined;
 
 export const DbSourceSchema = z.object({
   id: z.number(),
@@ -55,7 +58,19 @@ export type DbArticle = z.infer<typeof DbArticleSchema>;
 Other Types
 ============================================================= */
 
-export const SpiderArticleSchema = z.object({
+export const AuthFormSchema = z.object({
+  email: z
+    .string()
+    .trim()
+    .email({ message: 'Valid email is required'})
+    .min(5, { message: 'Email must be at least 5 characters'}),
+  password: z
+    .string()
+    .trim()
+    .min(8, { message: 'Password must be at least 8 characters'})
+});
+
+export const ArticleFromSpiderSchema = z.object({
   url: z.string(),
   title: z.string(),
   site: z.string(),
@@ -63,7 +78,13 @@ export const SpiderArticleSchema = z.object({
   source_uuid: z.string()
 });
 
-export type SpiderArticle = z.infer<typeof SpiderArticleSchema>;
+export type ArticleFromSpider = z.infer<typeof ArticleFromSpiderSchema>;
+
+export const ArrayOfArticlesFromSpiderSchema = z.array(ArticleFromSpiderSchema);
+
+export const PositiveNumberSchema = z.coerce.number().positive();
+export const NonEmptyStringSchema = z.string().min(1);
+export const Uuid = z.string().uuid();
 
 export type ApiResponse = {
   success: boolean;
@@ -88,10 +109,25 @@ export type SourceAtClient = {
   is_user_subscribed: boolean;
 };
 
-export type UserUpdateData = {
-  uuid: string;
-  new_email?: string | undefined;
-  new_password?: string | undefined;
-  new_subscriptions?: string[] | undefined;
-};
 
+export const UpdateUserSchema = z.object({
+  uuid: z
+    .string(),
+  new_email: z
+    .string()
+    .trim()
+    .email({ message: 'Valid email is required'})
+    .min(5, { message: 'Email must be at least 5 characters'})
+    .optional()
+    .or(z.literal('')),
+  new_password: asOptionalField(z
+    .string()
+    .trim()
+    .min(8, { message: 'Password must be at least 8 characters'})
+  ),
+  new_subscriptions:asOptionalField(z
+    .array(z.string(), { message: 'At least one subscription is required' })
+  )
+});
+
+export type UpdateUserData = z.infer<typeof UpdateUserSchema>;

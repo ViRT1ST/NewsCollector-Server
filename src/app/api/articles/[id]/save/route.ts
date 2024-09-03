@@ -1,7 +1,8 @@
 import { headers } from 'next/headers';
 
 import { successResponse, errorResponse } from '@/lib/api/responses';
-import validator from '@/lib/validator';
+import { ExtendedError } from '@/lib/errors';
+import { Uuid } from '@/lib/types';
 import pg from '@/lib/db/queries';
 
 export const dynamic = 'force-dynamic';
@@ -18,10 +19,17 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
     const authToken = headers().get('authorization');
     const user = await pg.getUserByToken(authToken);
 
-    const articleUuid = validator.assertString(params.id);
-    const userUuid = user.uuid;
+    if (!user) {
+      throw new ExtendedError(400, 'Invalid token. Please re-authenticate.');
+    }
 
-    await pg.saveArticleForUser(userUuid, articleUuid);
+    const result = Uuid.safeParse(params.id);
+
+    if (!result.success) {
+      throw new ExtendedError(400, 'Invalid article id');
+    }
+
+    await pg.saveArticleForUser(user.uuid, result.data);
 
     return successResponse(200, null);
 

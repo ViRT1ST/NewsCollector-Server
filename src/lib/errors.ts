@@ -14,3 +14,5 @@ export class ExtendedError extends Error {
 export function throwError(code: number, message: string): never {
   throw new ExtendedError(code, message);
 }
+
+

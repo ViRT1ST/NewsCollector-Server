@@ -1,7 +1,8 @@
 import { headers } from 'next/headers';
 
 import { successResponse, errorResponse } from '@/lib/api/responses';
-import jwt from '@/lib/auth/jsonwebtoken';
+import { ExtendedError } from '@/lib/errors';
+import jwt from '@/lib/auth/jwt';
 import pg from '@/lib/db/queries';
 
 export const dynamic = 'force-dynamic';
@@ -18,9 +19,13 @@ export const POST = async () => {
     const authToken = headers().get('authorization');
     const user = await pg.getUserByToken(authToken);
 
-    const token = jwt.sanitize(authToken);
+    if (!user) {
+      throw new ExtendedError(400, 'Invalid token. Please re-authenticate.');
+    }
 
-    const updatedTokens = user.tokens.filter((item) => item !== token);
+    const strippedToken = jwt.stripToken(authToken);
+
+    const updatedTokens = user.tokens.filter((item) => item !== strippedToken);
     await pg.updateUserTokens(user.uuid, updatedTokens);
 
     return successResponse(200, null);

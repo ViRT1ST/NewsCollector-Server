@@ -1,35 +1,35 @@
 import { v4 as uuidv4 } from 'uuid';
-import { Pool } from 'pg';
 
-import { DbSource, DbUser, UserUpdateData, SpiderArticle } from '@/lib/types';
-import bcrypt from '@/lib/auth/bcrypt';
-import jwt from '@/lib/auth/jsonwebtoken';
+import type {
+  DbSource,
+  DbUser,
+  DbUserOrUndef,
+  UpdateUserData,
+  ArticleFromSpider,
+} from '@/lib/types';
+import bcrypt from 'bcryptjs';
+import jwt from '@/lib/auth/jwt';
 import validator from '@/lib/validator';
+import executeQuery from './executor';
 
-const pool = new Pool({
-  host: process.env.PG_HOST,
-  port: 5432,
-  user: process.env.PG_USER,
-  password: process.env.PG_PASSWORD,
-  database: process.env.PG_DATABASE,
-});
-
-async function createUser(email: string, password: string): Promise<void | never> {
-  await checkEmailIsNotExist(email);
-
+// ok
+async function createUser(email: string, password: string) {
   const uuid = uuidv4();
   const token = jwt.generate(uuid);
-  const hashedPassword = await bcrypt.hashPassword(password);
+  const hashedPassword = await bcrypt.hash(password, 8);
 
   const query = `
     INSERT INTO nc_users (uuid, email, email_lowercase, password, tokens)
     VALUES ($1, $2, LOWER($2), $3, ARRAY [$4])
+    RETURNING *
   `;
   
-  await pool.query(query, [uuid, email, hashedPassword, token]);
+   const { rows } = await executeQuery(query, [uuid, email, hashedPassword, token]);
+   return rows[0] as DbUser;
 }
 
-async function getUserByEmail(email: string): Promise<DbUser | never> {
+// ok
+async function getUserByEmail(email: string) {
   const query = `
     SELECT *
     FROM nc_users
@@ -37,31 +37,15 @@ async function getUserByEmail(email: string): Promise<DbUser | never> {
     LIMIT 1
   `;
 
-  const { rows } = await pool.query(query, [email]);
-  const user = validator.assertUser(rows[0]);
-
-  return user;
+  const { rows } = await executeQuery(query, [email]);
+  return rows[0] as DbUserOrUndef;
 }
 
-async function checkEmailIsNotExist(email: string): Promise<void | never> {
-  const query = `
-    SELECT email_lowercase
-    FROM nc_users
-    WHERE email_lowercase = LOWER($1)
-    LIMIT 1
-  `;
+// ok
+async function getUserByToken(token: unknown) {
+  const strippedToken = jwt.stripToken(token);
 
-  const { rows } = await pool.query(query, [email]);
-
-  if (rows[0]) {
-    validator.throwError(400, 'This email is already associated with an account.');
-  }
-}
-
-async function getUserByToken(token: unknown): Promise<DbUser | never> {
-  const sanitizedToken = jwt.sanitize(token);
-
-  const { uuid } = jwt.verifyAndGetPayload(sanitizedToken);
+  const { uuid } = jwt.verifyAndGetPayload(strippedToken);
 
   const query = `
     SELECT *
@@ -70,24 +54,20 @@ async function getUserByToken(token: unknown): Promise<DbUser | never> {
     LIMIT 1
   `;
 
-  const { rows } = await pool.query(query, [uuid, sanitizedToken]);
-
-  if (rows.length === 0) {
-    validator.throwError(400, 'Invalid token. Please re-authenticate.');
-  }
-
-  const user = validator.assertUser(rows[0]);
-
-  return user;
+  const { rows } = await executeQuery(query, [uuid, strippedToken]);
+  return rows[0] as DbUserOrUndef;
 }
 
-async function updateUserTokens(userUuid: string, tokens: string[]): Promise<void> {
-  let checkedTokens = tokens.filter((token) => jwt.isValid(token));
+// ok
+async function updateUserTokens(userUuid: string, tokens: string[]) {
+  let updatedTokens: string[];
 
-  if (checkedTokens.length > 10) {
-    const beginIndex = checkedTokens.length - 10;
-    const endIndex = checkedTokens.length;
-    checkedTokens = checkedTokens.slice(beginIndex, endIndex);
+  if (tokens.length > 10) {
+    const beginIndex = tokens.length - 10;
+    const endIndex = tokens.length;
+    updatedTokens = tokens.slice(beginIndex, endIndex);
+  } else {
+    updatedTokens = tokens;
   }
 
   const query = `
@@ -96,11 +76,12 @@ async function updateUserTokens(userUuid: string, tokens: string[]): Promise<voi
     WHERE uuid = $1
   `;
 
-  await pool.query(query, [userUuid, checkedTokens] as any);
+  await executeQuery(query, [userUuid, updatedTokens] as any);
 }
 
-async function updateUser(data: UserUpdateData): Promise<void> {
-  const { uuid, new_email, new_password, new_subscriptions } = data;
+// ok
+async function updateUser(data: UpdateUserData) {
+  const { uuid, new_email, new_password, new_subscriptions = [] } = data;
 
   const paramsForSet: string[] = [];
   const paramsToPass: any[] = [uuid];
@@ -112,7 +93,7 @@ async function updateUser(data: UserUpdateData): Promise<void> {
 
   new_email && addParam('email', new_email);
   new_email && addParam('email_lowercase', new_email.toLowerCase());
-  new_password && addParam('password', await bcrypt.hashPassword(new_password));
+  new_password && addParam('password', await bcrypt.hash(new_password, 8));
   new_subscriptions && addParam('subscriptions', new_subscriptions);
 
   const query = `
@@ -121,26 +102,27 @@ async function updateUser(data: UserUpdateData): Promise<void> {
     WHERE uuid = $1
   `;
 
-  await pool.query(query, paramsToPass);
+  await executeQuery(query, paramsToPass);
 }
 
-async function deleteUser(userUuid: string): Promise<void> {
+// ok
+async function deleteUser(userUuid: string) {
   const cleanArticlesQuery = `
     UPDATE nc_articles
-    SET unreaded_by = ARRAY_REMOVE(unreaded_by, $1), saved_by = ARRAY_REMOVE(saved_by, $1);
+    SET unreaded_by = ARRAY_REMOVE(unreaded_by, $1), saved_by = ARRAY_REMOVE(saved_by, $1)
   `;
-
-  await pool.query(cleanArticlesQuery, [userUuid]);
 
   const deleteUserQuery = `
     DELETE FROM nc_users
     WHERE uuid = $1
   `;
 
-  await pool.query(deleteUserQuery, [userUuid]);
+  await executeQuery(cleanArticlesQuery, [userUuid]);
+  await executeQuery(deleteUserQuery, [userUuid]);
 }
 
-async function getSourcesList(): Promise<DbSource[] | never> {
+// ok
+async function getSourcesList() {
   const query = `
     SELECT uuid, site, section, url, parsing_method, regex, remove_in_title, translate_title
     FROM nc_sources
@@ -148,25 +130,23 @@ async function getSourcesList(): Promise<DbSource[] | never> {
     ORDER BY site, section
   `;
 
-  const { rows } = await pool.query(query);
-  const sources = rows as DbSource[];
-
-  return sources;
+  const { rows } = await executeQuery(query);
+  return rows as DbSource[];
 }
 
-async function getArticlesUrls(): Promise<string[] | never> {
+// ok
+async function getArticlesUrls() {
   const query = `
     SELECT url
     FROM nc_articles
   `;
 
-  const { rows } = await pool.query(query);
-  const sources = rows.map((item) => item.url) as string[];
-
-  return sources;
+  const { rows } = await executeQuery(query);
+  return rows.map((item: { url: string }) => item.url);
 }
 
-async function getArticlesForUser(userUuid: string, isSavedBy: boolean): Promise<any[] | never> {
+// ok
+async function getArticlesForUser(userUuid: string, isSavedBy: boolean) {
   const query = `
     SELECT uuid, site, section, title, url, created_at 
     FROM nc_articles
@@ -175,13 +155,12 @@ async function getArticlesForUser(userUuid: string, isSavedBy: boolean): Promise
     LIMIT 100;
   `;
 
-  const { rows } = await pool.query(query, [userUuid]);
-  const articles = rows as any[];
-
-  return articles;
+  const { rows } = await executeQuery(query, [userUuid]);
+  return rows as any[];  
 }
 
-async function insertArticles(array: SpiderArticle[]): Promise<void | never> {
+// ok
+async function insertArticles(array: ArticleFromSpider[]) {
   const query = `
     INSERT INTO nc_articles (url, title, site, section, source_uuid, unreaded_by)
     SELECT url, title, site, section, source_uuid, (
@@ -194,45 +173,46 @@ async function insertArticles(array: SpiderArticle[]): Promise<void | never> {
     FROM json_populate_recordset(NULL::nc_articles, $1);
   `;
 
-  await pool.query(query, [JSON.stringify(array)]);
+  await executeQuery(query, [JSON.stringify(array)]);
 }
 
-async function deleteOldArticles(olderThanMonths: number): Promise<any | never> {
+// ok
+async function deleteOldArticles(olderThanMonths: number) {
   const query = `
     DELETE
     FROM nc_articles
     WHERE EXTRACT(EPOCH FROM created_at) < (EXTRACT(EPOCH FROM NOW()) - 2592000 * $1)
   `;
 
-  const { rowCount } = await pool.query(query, [olderThanMonths]);
-
+  const { rowCount } = await executeQuery(query, [olderThanMonths]);
   return rowCount;
 }
 
-async function hideArticleFromUser(userUuid: string, articleUuid: string): Promise<void | never> {
+// ok
+async function hideArticleFromUser(userUuid: string, articleUuid: string) {
   const query = `
     UPDATE nc_articles
     SET unreaded_by = ARRAY_REMOVE(unreaded_by, $1), saved_by = ARRAY_REMOVE(saved_by, $1)
     WHERE uuid = $2
   `;
 
-  await pool.query(query, [userUuid, articleUuid]);
+  await executeQuery(query, [userUuid, articleUuid]);
 }
 
-async function saveArticleForUser(userUuid: string, articleUuid: string): Promise<void | never> {
+// ok
+async function saveArticleForUser(userUuid: string, articleUuid: string) {
   const query = `
     UPDATE nc_articles
     SET unreaded_by = ARRAY_REMOVE(unreaded_by, $1), saved_by = ARRAY_APPEND(saved_by, $1)
     WHERE uuid = $2
   `;
 
-  await pool.query(query, [userUuid, articleUuid]);
+  await executeQuery(query, [userUuid, articleUuid]);
 }
 
 export default {
   createUser,
   getUserByEmail,
-  checkEmailIsNotExist,
   getUserByToken,
   updateUserTokens,
   updateUser,

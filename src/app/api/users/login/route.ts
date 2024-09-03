@@ -1,8 +1,10 @@
-import { successResponse, errorResponse } from '@/lib/api/responses';
+import bcrypt from 'bcryptjs';
 
-import jwt from '@/lib/auth/jsonwebtoken';
-import bcrypt from '@/lib/auth/bcrypt';
-import validator from '@/lib/validator';
+import { successResponse, errorResponse } from '@/lib/api/responses';
+import { convertZodErrorsToMsgArray } from '@/lib/utils/zod';
+import { ExtendedError } from '@/lib/errors';
+import { AuthFormSchema } from '@/lib/types';
+import jwt from '@/lib/auth/jwt';
 import pg from '@/lib/db/queries';
 
 export const dynamic = 'force-dynamic';
@@ -18,13 +20,23 @@ export const POST = async (req: Request) => {
   try {
     const { email, password } = await req.json();
 
-    const validEmail = validator.assertEmail(email);
-    const validPassword = validator.assertPassword(password);
+    const result = AuthFormSchema.safeParse({ email, password });
+    if (!result.success) {
+      const errorMessages = convertZodErrorsToMsgArray(result);
+      throw new ExtendedError(400, errorMessages.join(' | '));
+    }
+    
+    const user = await pg.getUserByEmail(result.data.email);
+    if (!user) {
+      throw new ExtendedError(404, 'User with this email not exist');
+    }
+ 
+    const isPasswordMatches = bcrypt.compareSync(result.data.password, user.password);
+    if (!isPasswordMatches) {
+      throw new ExtendedError(400, 'Invalid password');
+    }
 
-    const user = await pg.getUserByEmail(validEmail);
-
-    bcrypt.checkPassword(validPassword, user.password);
-
+    // all ok, logging in
     const newToken = jwt.generate(user.uuid);
     const updatedTokens = [...user.tokens, newToken];
     await pg.updateUserTokens(user.uuid, updatedTokens);

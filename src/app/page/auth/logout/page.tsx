@@ -20,7 +20,7 @@ export default function LogoutPage() {
     removeCookies(['uuid', 'email', 'token']);
     dispatch(removeAccountData());
 
-    router.push('/auth');
+    router.push('/page/auth');
   }, []);
   
   return (

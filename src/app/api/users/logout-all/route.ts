@@ -1,6 +1,7 @@
 import { headers } from 'next/headers';
 
 import { successResponse, errorResponse } from '@/lib/api/responses';
+import { ExtendedError } from '@/lib/errors';
 import pg from '@/lib/db/queries';
 
 export const dynamic = 'force-dynamic';
@@ -16,6 +17,10 @@ export const POST = async () => {
   try {
     const authToken = headers().get('authorization');
     const user = await pg.getUserByToken(authToken);
+
+    if (!user) {
+      throw new ExtendedError(400, 'Invalid token. Please re-authenticate.');
+    }
 
     await pg.updateUserTokens(user.uuid, []);
 

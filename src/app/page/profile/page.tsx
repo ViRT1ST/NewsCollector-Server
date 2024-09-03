@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 
 import { useGetProfileQuery, useUpdateUserMutation } from '@/lib/frontend/store';
 import { getApiResponse } from '@/lib/frontend/utils/api';
-import { SourceAtClient, UserUpdateData } from '@/lib/types';
+import { SourceAtClient, UpdateUserData } from '@/lib/types';
 import { classesBeautify } from '@/lib/frontend/utils/styles';
 import PageInner from '@/components/[common-ui]/page-inner';
 import Spinner from '@/components/[common-ui]/spinner';
@@ -52,7 +52,7 @@ export default function ProfilePage() {
 
     setProfileIsUpdated(false);
 
-    const data: Omit<UserUpdateData, 'uuid'> = {
+    const data: Omit<UpdateUserData, 'uuid'> = {
       new_subscriptions: sources
         .filter((item) => item.is_user_subscribed)
         .map((item) => item.uuid),

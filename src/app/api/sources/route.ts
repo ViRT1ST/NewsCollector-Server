@@ -1,7 +1,7 @@
 import { headers } from 'next/headers';
 
 import { successResponse, errorResponse } from '@/lib/api/responses';
-import validator from '@/lib/validator';
+import { ExtendedError } from '@/lib/errors';
 import pg from '@/lib/db/queries';
 
 export const dynamic = 'force-dynamic';
@@ -11,14 +11,21 @@ Endpoint     : GET /api/sources
 Query Params : none
 Headers:     : authorization
 Body         : none
+Comment      : routes for admins only (spider)
 ============================================================= */
 
 export const GET = async () => {
   try {
     const authToken = headers().get('authorization');
     const user = await pg.getUserByToken(authToken);
- 
-    validator.checkUserIsAdmin(user);
+
+    if (!user) {
+      throw new ExtendedError(400, 'Invalid token. Please re-authenticate.');
+    }
+
+    if (!user.is_admin) {
+      throw new ExtendedError(403, 'You do not have permission to this action.');
+    }
 
     const sources = await pg.getSourcesList();
 

@@ -18,14 +18,14 @@ const authConfig: any = {
   login: {
     formTitle: 'Login',
     buttonText: 'Login',
-    swichingLink: '/auth',
+    swichingLink: '/page/auth',
     swichingText: 'Register',
     apiHook: useLoginUserMutation,
   },
   register: {
     formTitle: 'Registration',
     buttonText: 'Register',
-    swichingLink: '/auth',
+    swichingLink: '/page/auth',
     swichingText: 'Log In',
     apiHook: useCreateUserMutation,
   }
@@ -53,7 +53,7 @@ export default function AuthPage() {
       dispatch(updateAccountData(userData));
       createCookies(userData);
 
-      router.push('/articles/unreaded');
+      router.push('/page/articles/unreaded');
     }
   }, [authResults.data?.data?.token]);
 

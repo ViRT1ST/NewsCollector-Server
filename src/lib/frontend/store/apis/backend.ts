@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { ROOT_PATH } from '@/constants/public';
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_DOMAIN;
+const apiBaseUrl = `${ROOT_PATH}/api`;
 
 function getHeaders(headers: Headers, getState: any) {
   const token = getState().account.token;
