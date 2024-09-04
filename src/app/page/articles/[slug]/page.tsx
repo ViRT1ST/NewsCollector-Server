@@ -1,5 +1,6 @@
 import ArticlesList from '@/components/articles-list';
 import PageInner from '@/components/[common-ui]/page-inner';
+import type { Slug } from '@/types';
 
 const pageConfig = {
   unreaded: {
@@ -10,14 +11,8 @@ const pageConfig = {
   },
 };
 
-type Props = {
-  params: {
-    slug: string[];
-  };
-};
-
-export default function SavedPage({ params }: Props) {
-  const page = params.slug[0] === 'unreaded' ? 'unreaded' : 'saved';
+export default function SavedPage({ params }: Slug) {
+  const page = params.slug === 'unreaded' ? 'unreaded' : 'saved';
   const noArticlesMsg = pageConfig[page].noArticlesMsg;
 
   return (

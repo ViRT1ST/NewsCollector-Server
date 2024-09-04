@@ -40,7 +40,7 @@ Authorization: Bearer
 # User | Logout (delete all tokens)
 # ================================================
 
-POST {{nextApiUrl}}/users/logout-all
+POST {{nextApiUrl}}/users/logout?all=true
 Content-Type: application/json
 Authorization: Bearer 
 

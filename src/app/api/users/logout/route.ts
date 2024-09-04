@@ -1,32 +1,40 @@
 import { headers } from 'next/headers';
+import { NextRequest } from 'next/server';
 
-import { successResponse, errorResponse } from '@/lib/api/responses';
-import { ExtendedError } from '@/lib/errors';
-import jwt from '@/lib/auth/jwt';
-import pg from '@/lib/db/queries';
+import { successResponse, errorResponse } from '@/utils/api';
+import { ERRORS, ExtendedError } from '@/utils/errors';
+import jwt from '@/lib/jwt';
+import pg from '@/lib/postgres/queries';
 
 export const dynamic = 'force-dynamic';
 
 /* =============================================================
 Endpoint     : POST /api/users/logout
-Query Params : none
+Query Params : all=true
 Headers:     : authorization
 Body         : none
 ============================================================= */
 
-export const POST = async () => {
+export const POST = async (req: NextRequest) => {
   try {
     const authToken = headers().get('authorization');
     const user = await pg.getUserByToken(authToken);
 
     if (!user) {
-      throw new ExtendedError(400, 'Invalid token. Please re-authenticate.');
+      throw new ExtendedError(...ERRORS.invalidToken);
     }
 
-    const strippedToken = jwt.stripToken(authToken);
+    const isNeedLogoutFromAllDevices = req.nextUrl.searchParams.get('all') === 'true';
 
-    const updatedTokens = user.tokens.filter((item) => item !== strippedToken);
-    await pg.updateUserTokens(user.uuid, updatedTokens);
+    if (isNeedLogoutFromAllDevices) {
+      await pg.updateUserTokens(user.uuid, []);
+
+    } else {
+      const currentToken = jwt.stripToken(authToken);
+      const updatedTokens = user.tokens.filter((item) => item !== currentToken);
+      
+      await pg.updateUserTokens(user.uuid, updatedTokens);
+    }
 
     return successResponse(200, null);
 

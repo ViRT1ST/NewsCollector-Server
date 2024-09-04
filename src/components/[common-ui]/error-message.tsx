@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { classesBeautify } from '@/lib/frontend/utils/styles';
+import { classesBeautify } from '@/utils/styles';
 
 const redirectPath = '/page/auth';
 const initialSeconds = 9;
@@ -15,7 +15,7 @@ type Props = {
 export default function ErrorMessage({ code = 400, message = 'Unknown error' }: Props) {
   const router = useRouter();
 
-  const [seconds, setSeconds] = useState(initialSeconds);
+  const [ seconds, setSeconds ] = useState(initialSeconds);
 
   useEffect(() => {
     if (seconds < 0) {

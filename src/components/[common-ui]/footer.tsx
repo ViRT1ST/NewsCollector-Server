@@ -1,7 +1,7 @@
 'use client';
 
-import { toggleTheme } from '@/lib/frontend/utils/themes';
-import { classesBeautify } from '@/lib/frontend/utils/styles';
+import { toggleTheme } from '@/utils/themes';
+import { classesBeautify } from '@/utils/styles';
 
 export default function Footer() {
   return (

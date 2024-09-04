@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
+const accountInitialState = {
   uuid: null,
   email: null,
   token: null,
@@ -8,23 +8,22 @@ const initialState = {
 
 const accountSlice = createSlice({
   name: 'account',
-  initialState,
+  initialState: accountInitialState,
   reducers: {
-    updateAccountData(state, action) {
+    updateData(state, action) {
       state.uuid = action.payload.uuid;
       state.email = action.payload.email;
       state.token = action.payload.token;
     },
-    removeAccountData() {
-      return initialState;
+    removeData() {
+      return accountInitialState;
     }, 
   }
 });
 
-const { updateAccountData, removeAccountData } = accountSlice.actions;
+const accountActions = { ...accountSlice.actions };
 
 export {
   accountSlice,
-  updateAccountData,
-  removeAccountData
+  accountActions
 };

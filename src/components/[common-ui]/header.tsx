@@ -5,7 +5,7 @@ import { LuMenu } from 'react-icons/lu';
 import { twMerge } from 'tailwind-merge';
 import Link from 'next/link';
 
-import { classesBeautify } from '@/lib/frontend/utils/styles';
+import { classesBeautify } from '@/utils/styles';
 
 const navConfig = [
   { href: '/page/articles/unreaded', label: 'Unreaded' },
@@ -15,7 +15,7 @@ const navConfig = [
 ];
 
 export default function Header() {
-  const [isMenuShowing, setIsMenuShowing] = useState(false);
+  const [ isMenuShowing, setIsMenuShowing ] = useState(false);
 
   const handleMenuButtonClick = () => {
     setIsMenuShowing((current) => !current);

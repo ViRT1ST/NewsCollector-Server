@@ -1,5 +1,5 @@
 import { BiLoaderCircle } from 'react-icons/bi';
-import { classesBeautify } from '@/lib/frontend/utils/styles';
+import { classesBeautify } from '@/utils/styles';
 
 export default function Spinner() {
   return (

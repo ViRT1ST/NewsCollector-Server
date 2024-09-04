@@ -1,6 +1,6 @@
-import { ApiResponse } from '@/lib/types';
+import { ApiResponse } from '@/types';
 
-function successResponse(code: number, data: object | null) {
+export function successResponse(code: number, data: object | null) {
   const body: ApiResponse = {
     success: true,
     code: code || 200,
@@ -12,7 +12,7 @@ function successResponse(code: number, data: object | null) {
   return Response.json(body, responseInit);
 }
 
-function errorResponse(error: any) {
+export function errorResponse(error: any) {
   const { name, code, message } = error;
 
   const body: ApiResponse = {
@@ -35,8 +35,3 @@ function errorResponse(error: any) {
   const responseInit = { status: body.code };
   return Response.json(body, responseInit);
 }
-
-export {
-  successResponse,
-  errorResponse
-};

@@ -1,8 +1,8 @@
 import { headers } from 'next/headers';
 
-import { successResponse, errorResponse } from '@/lib/api/responses';
-import { ExtendedError } from '@/lib/errors';
-import pg from '@/lib/db/queries';
+import { successResponse, errorResponse } from '@/utils/api';
+import { ERRORS, ExtendedError } from '@/utils/errors';
+import pg from '@/lib/postgres/queries';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,7 +11,6 @@ Endpoint     : GET /api/sources
 Query Params : none
 Headers:     : authorization
 Body         : none
-Comment      : routes for admins only (spider)
 ============================================================= */
 
 export const GET = async () => {
@@ -20,11 +19,11 @@ export const GET = async () => {
     const user = await pg.getUserByToken(authToken);
 
     if (!user) {
-      throw new ExtendedError(400, 'Invalid token. Please re-authenticate.');
+      throw new ExtendedError(...ERRORS.invalidToken);
     }
 
     if (!user.is_admin) {
-      throw new ExtendedError(403, 'You do not have permission to this action.');
+      throw new ExtendedError(...ERRORS.notAdmin);
     }
 
     const sources = await pg.getSourcesList();

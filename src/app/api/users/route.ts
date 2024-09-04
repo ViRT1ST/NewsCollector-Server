@@ -1,8 +1,8 @@
-import { successResponse, errorResponse } from '@/lib/api/responses';
-import { convertZodErrorsToMsgArray } from '@/lib/utils/zod';
-import { ExtendedError } from '@/lib/errors';
-import { AuthFormSchema } from '@/lib/types';
-import pg from '@/lib/db/queries';
+import { successResponse, errorResponse } from '@/utils/api';
+import { convertZodErrorsToMsgArray } from '@/utils/zod';
+import { ERRORS, ExtendedError } from '@/utils/errors';
+import { authForm, AuthFormSchema } from '@/types';
+import pg from '@/lib/postgres/queries';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,22 +15,26 @@ Body         : { email, password }
 
 export const POST = async (req: Request) => {
   try {
-    const { email, password } = await req.json();
+    const body: authForm = await req.json();
 
-    const result = AuthFormSchema.safeParse({ email, password });
+    const result = AuthFormSchema.safeParse(body);
+
     if (!result.success) {
       const errorMessages = convertZodErrorsToMsgArray(result);
       throw new ExtendedError(400, errorMessages.join(' | '));
     }
 
-    const existingUser = await pg.getUserByEmail(result.data.email);
+    const { email, password } = result.data;
+
+    const existingUser = await pg.getUserByEmail(email);
+    
     if (existingUser) {
-      throw new ExtendedError(400, 'User already exists');
+      throw new ExtendedError(...ERRORS.userAlreadyExists);
     }
 
-    const user = await pg.createUser(result.data.email, result.data.password);
+    const user = await pg.createUser(email, password);
 
-    const data = {
+    const dataToReturn = {
       user: {
         uuid: user.uuid,
         email: user.email,
@@ -39,7 +43,7 @@ export const POST = async (req: Request) => {
       token: user.tokens[0],
     };
 
-    return successResponse(200, data);
+    return successResponse(200, dataToReturn);
 
   } catch (error) {
     return errorResponse(error);

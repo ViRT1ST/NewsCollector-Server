@@ -5,14 +5,10 @@ import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-import { createCookies } from '@/lib/frontend/utils/cookies';
-import { classesBeautify } from '@/lib/frontend/utils/styles';
-
-import {
-  useLoginUserMutation,
-  useCreateUserMutation,
-  updateAccountData
-} from '@/lib/frontend/store';
+import { accountActions } from '@/lib/redux/slices';
+import { usersApi } from '@/lib/redux/apis';
+import { createCookies } from '@/utils/cookies';
+import { classesBeautify } from '@/utils/styles';
 
 const authConfig: any = {
   login: {
@@ -20,14 +16,14 @@ const authConfig: any = {
     buttonText: 'Login',
     swichingLink: '/page/auth',
     swichingText: 'Register',
-    apiHook: useLoginUserMutation,
+    apiHook: usersApi.useLoginUserMutation,
   },
   register: {
     formTitle: 'Registration',
     buttonText: 'Register',
     swichingLink: '/page/auth',
     swichingText: 'Log In',
-    apiHook: useCreateUserMutation,
+    apiHook: usersApi.useCreateUserMutation,
   }
 };
 
@@ -35,12 +31,12 @@ export default function AuthPage() {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const [pageType, setPageType] = useState('login');
+  const [ pageType, setPageType ] = useState('login');
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
-  const [authUser, authResults] = authConfig[pageType].apiHook();
+  const [ authUser, authResults ] = authConfig[pageType].apiHook();
 
   const errorMessage = authResults.error?.data?.message;
 
@@ -50,7 +46,7 @@ export default function AuthPage() {
       const { uuid, email } = user;
 
       const userData = { uuid, email, token };
-      dispatch(updateAccountData(userData));
+      dispatch(accountActions.updateData(userData));
       createCookies(userData);
 
       router.push('/page/articles/unreaded');
@@ -126,7 +122,17 @@ export default function AuthPage() {
           </Link>
         </div>
 
-        {errorMessage && <p className={twErrorInfo}>{errorMessage}</p>}
+        {errorMessage && (
+          <div className={twErrorContainer}>
+            <span>Authentication errors</span>
+            <p className={twErrorInfo}>{
+              errorMessage
+                .split(' | ')
+                .map((item: string) => `* ${item}`)
+                .join('\n')
+            }</p>
+          </div>
+        )}
 
       </div>
     </div>
@@ -194,6 +200,11 @@ const twLinksAreaItem = classesBeautify(`
   hover:underline
 `);
 
+const twErrorContainer =classesBeautify(`
+  min-w-64 max-w-[400px] mx-auto my-5 py-6 px-4 flex flex-col gap-3
+  text-red-500 bg-red-50 border-red-200 border rounded-xl
+`);
+
 const twErrorInfo = classesBeautify(`
-  text-red-500 text-center leading-8
+  text-black leading-6 whitespace-pre 
 `);

@@ -2,10 +2,10 @@
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import { restorePageThemeFromStorage } from '@/lib/frontend/utils/themes';
-import { updateAccountData } from '@/lib/frontend/store';
-import { getCookies } from '@/lib/frontend/utils/cookies';
-import { classesBeautify } from '@/lib/frontend/utils/styles';
+import { accountActions } from '@/lib/redux/slices';
+import { restorePageThemeFromStorage } from '@/utils/themes';
+import { getCookies } from '@/utils/cookies';
+import { classesBeautify } from '@/utils/styles';
 import Header from '@/components/[common-ui]/header';
 import Footer from '@/components/[common-ui]/footer';
 
@@ -22,7 +22,7 @@ export default function PageInner({ privateRoute = true, children }: Props) {
   const { id, email, token } = getCookies();
     
   if (!stateToken && token) {
-    dispatch(updateAccountData({ id, email, token }));
+    dispatch(accountActions.updateData({ id, email, token }));
   }
 
   return (

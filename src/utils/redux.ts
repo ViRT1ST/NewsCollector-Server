@@ -1,14 +1,8 @@
-function getApiResponse(successResponse: any, errorResponse: any) {
-  const apiResponse = {
+export function formatQueryResults(successResponse: any, errorResponse: any) {
+  return {
     success: successResponse?.success || errorResponse?.success || false,
     code: successResponse?.code || errorResponse?.code || 500,
     data: successResponse?.data || null,
     message: errorResponse?.message || null
   };
-
-  return apiResponse;
 }
-
-export {
-  getApiResponse
-};

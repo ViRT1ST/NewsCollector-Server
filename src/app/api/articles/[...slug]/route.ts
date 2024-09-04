@@ -2,18 +2,19 @@ import { headers } from 'next/headers';
 
 import { successResponse, errorResponse } from '@/utils/api';
 import { ERRORS, ExtendedError } from '@/utils/errors';
+import { CatchAllSlug } from '@/types';
 import pg from '@/lib/postgres/queries';
 
 export const dynamic = 'force-dynamic';
 
 /* =============================================================
-Endpoint     : GET /api/articles/urls
+Endpoint     : PATCH /api/articles/:id/:hide|save
 Query Params : none
 Headers:     : authorization
 Body         : none
 ============================================================= */
 
-export const GET = async () => {
+export const PATCH = async (req: Request, { params }: CatchAllSlug) => {
   try {
     const authToken = headers().get('authorization');
     const user = await pg.getUserByToken(authToken);
@@ -22,15 +23,17 @@ export const GET = async () => {
       throw new ExtendedError(...ERRORS.invalidToken);
     }
 
-    if (!user.is_admin) {
-      throw new ExtendedError(...ERRORS.notAdmin);
+    const [ articleUuid, articleAction ] = params.slug;
+
+    if (articleAction === 'hide') {
+      await pg.hideArticleFromUser(user.uuid, articleUuid);
+    } else {
+      await pg.saveArticleForUser(user.uuid, articleUuid);
     }
 
-    const urls = await pg.getArticlesUrls();
+    return successResponse(200, null);
 
-    return successResponse(200, urls);
-
-  } catch (error: any) {
+  } catch (error) {
     return errorResponse(error);
   }
 };

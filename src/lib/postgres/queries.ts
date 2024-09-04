@@ -1,18 +1,16 @@
 import { v4 as uuidv4 } from 'uuid';
+import bcrypt from 'bcryptjs';
 
 import type {
-  DbSource,
   DbUser,
   DbUserOrUndef,
-  UpdateUserData,
+  DbSource,
+  UpdateUser,
   ArticleFromSpider,
-} from '@/lib/types';
-import bcrypt from 'bcryptjs';
-import jwt from '@/lib/auth/jwt';
-import validator from '@/lib/validator';
+} from '@/types';
+import jwt from '@/lib/jwt';
 import executeQuery from './executor';
 
-// ok
 async function createUser(email: string, password: string) {
   const uuid = uuidv4();
   const token = jwt.generate(uuid);
@@ -28,7 +26,6 @@ async function createUser(email: string, password: string) {
    return rows[0] as DbUser;
 }
 
-// ok
 async function getUserByEmail(email: string) {
   const query = `
     SELECT *
@@ -41,7 +38,6 @@ async function getUserByEmail(email: string) {
   return rows[0] as DbUserOrUndef;
 }
 
-// ok
 async function getUserByToken(token: unknown) {
   const strippedToken = jwt.stripToken(token);
 
@@ -58,7 +54,6 @@ async function getUserByToken(token: unknown) {
   return rows[0] as DbUserOrUndef;
 }
 
-// ok
 async function updateUserTokens(userUuid: string, tokens: string[]) {
   let updatedTokens: string[];
 
@@ -79,8 +74,7 @@ async function updateUserTokens(userUuid: string, tokens: string[]) {
   await executeQuery(query, [userUuid, updatedTokens] as any);
 }
 
-// ok
-async function updateUser(data: UpdateUserData) {
+async function updateUser(data: UpdateUser) {
   const { uuid, new_email, new_password, new_subscriptions = [] } = data;
 
   const paramsForSet: string[] = [];
@@ -105,7 +99,6 @@ async function updateUser(data: UpdateUserData) {
   await executeQuery(query, paramsToPass);
 }
 
-// ok
 async function deleteUser(userUuid: string) {
   const cleanArticlesQuery = `
     UPDATE nc_articles
@@ -121,7 +114,6 @@ async function deleteUser(userUuid: string) {
   await executeQuery(deleteUserQuery, [userUuid]);
 }
 
-// ok
 async function getSourcesList() {
   const query = `
     SELECT uuid, site, section, url, parsing_method, regex, remove_in_title, translate_title
@@ -134,7 +126,6 @@ async function getSourcesList() {
   return rows as DbSource[];
 }
 
-// ok
 async function getArticlesUrls() {
   const query = `
     SELECT url
@@ -145,7 +136,6 @@ async function getArticlesUrls() {
   return rows.map((item: { url: string }) => item.url);
 }
 
-// ok
 async function getArticlesForUser(userUuid: string, isSavedBy: boolean) {
   const query = `
     SELECT uuid, site, section, title, url, created_at 
@@ -159,7 +149,6 @@ async function getArticlesForUser(userUuid: string, isSavedBy: boolean) {
   return rows as any[];  
 }
 
-// ok
 async function insertArticles(array: ArticleFromSpider[]) {
   const query = `
     INSERT INTO nc_articles (url, title, site, section, source_uuid, unreaded_by)
@@ -176,7 +165,6 @@ async function insertArticles(array: ArticleFromSpider[]) {
   await executeQuery(query, [JSON.stringify(array)]);
 }
 
-// ok
 async function deleteOldArticles(olderThanMonths: number) {
   const query = `
     DELETE
@@ -188,7 +176,6 @@ async function deleteOldArticles(olderThanMonths: number) {
   return rowCount;
 }
 
-// ok
 async function hideArticleFromUser(userUuid: string, articleUuid: string) {
   const query = `
     UPDATE nc_articles
@@ -199,7 +186,6 @@ async function hideArticleFromUser(userUuid: string, articleUuid: string) {
   await executeQuery(query, [userUuid, articleUuid]);
 }
 
-// ok
 async function saveArticleForUser(userUuid: string, articleUuid: string) {
   const query = `
     UPDATE nc_articles

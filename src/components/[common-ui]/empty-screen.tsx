@@ -1,4 +1,4 @@
-import { classesBeautify } from '@/lib/frontend/utils/styles';
+import { classesBeautify } from '@/utils/styles';
 
 export default function EmptyScreen() {
   return (

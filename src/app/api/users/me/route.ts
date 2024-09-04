@@ -1,10 +1,10 @@
 import { headers } from 'next/headers';
 
-import { successResponse, errorResponse } from '@/lib/api/responses';
-import { ExtendedError } from '@/lib/errors';
-import { UpdateUserSchema, UpdateUserData } from '@/lib/types';
-import { convertZodErrorsToMsgArray } from '@/lib/utils/zod';
-import pg from '@/lib/db/queries';
+import { successResponse, errorResponse } from '@/utils/api';
+import { ERRORS, ExtendedError } from '@/utils/errors';
+import { UpdateUserSchema, UpdateUserData } from '@/types';
+import { convertZodErrorsToMsgArray } from '@/utils/zod';
+import pg from '@/lib/postgres/queries';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,14 +21,14 @@ export const GET = async () => {
     const user = await pg.getUserByToken(authToken);
 
     if (!user) {
-      throw new ExtendedError(400, 'Invalid token. Please re-authenticate.');
+      throw new ExtendedError(...ERRORS.invalidToken);
     }
 
     const { uuid, email, subscriptions } = user;
 
     const sources = await pg.getSourcesList();
 
-    const data = {
+    const dataToReturn = {
       uuid,
       email,
       sources: sources.map(({ uuid: source_uuid, site, section }) => {
@@ -41,7 +41,7 @@ export const GET = async () => {
       })
     };
 
-    return successResponse(200, data);
+    return successResponse(200, dataToReturn);
 
   } catch (error) {
     return errorResponse(error);
@@ -61,7 +61,7 @@ export const DELETE = async () => {
     const user = await pg.getUserByToken(authToken);
 
     if (!user) {
-      throw new ExtendedError(400, 'Invalid token. Please re-authenticate.');
+      throw new ExtendedError(...ERRORS.invalidToken);
     }
 
     await pg.deleteUser(user.uuid);
@@ -86,7 +86,7 @@ export const PATCH = async (req: Request) => {
     const user = await pg.getUserByToken(authToken);
 
     if (!user) {
-      throw new ExtendedError(400, 'Invalid token. Please re-authenticate.');
+      throw new ExtendedError(...ERRORS.invalidToken);
     }
 
     const body: Omit<UpdateUserData, 'uuid'> = await req.json();
@@ -111,14 +111,13 @@ export const PATCH = async (req: Request) => {
 
     // new_email is valid -> add it to update data 
     if (new_email) {
-      // if user.email and new_email are same -> no need include it in update data
-      const isNeedToUpdateEmail = new_email.toLowerCase() !== user.email.toLowerCase();
+      const isEmailDifferent = new_email.toLowerCase() !== user.email.toLowerCase();
 
-      if (isNeedToUpdateEmail) {
+      if (isEmailDifferent) {
         const userWithSameEmail = await pg.getUserByEmail(new_email);
 
         if (userWithSameEmail) {
-          throw new ExtendedError(400, 'User with this email already exist');
+          throw new ExtendedError(...ERRORS.notAllowedNewEmail);
         } else {
           updateUserData.new_email = new_email;
         }

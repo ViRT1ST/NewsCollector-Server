@@ -2,23 +2,23 @@
 
 import { useState, useEffect, useRef } from 'react';
 
-import { useGetProfileQuery, useUpdateUserMutation } from '@/lib/frontend/store';
-import { getApiResponse } from '@/lib/frontend/utils/api';
-import { SourceAtClient, UpdateUserData } from '@/lib/types';
-import { classesBeautify } from '@/lib/frontend/utils/styles';
+import { usersApi } from '@/lib/redux/apis';
+import { formatQueryResults } from '@/utils/redux';
+import { SourceAtClient, UpdateUser } from '@/types';
+import { classesBeautify } from '@/utils/styles';
 import PageInner from '@/components/[common-ui]/page-inner';
 import Spinner from '@/components/[common-ui]/spinner';
 import ErrorMessage from '@/components/[common-ui]/error-message';
 import Checkbox from '@/components/[common-ui]/checkbox';
 
 export default function ProfilePage() {
-  const { data: response, error, isFetching, refetch } = useGetProfileQuery();
-  const [updateUser, updateResults] = useUpdateUserMutation();
+  const { data: response, error, isFetching, refetch } = usersApi.useGetProfileQuery();
+  const [ updateUser, updateResults ] = usersApi.useUpdateUserMutation();
 
-  const { success, code, data, message } = getApiResponse(response, error);
+  const { success, code, data, message } = formatQueryResults(response, error);
 
-  const [sources, setSources] = useState<SourceAtClient[]>([]);
-  const [profileIsUpdated, setProfileIsUpdated] = useState(false);
+  const [ sources, setSources ] = useState<SourceAtClient[]>([]);
+  const [ profileIsUpdated, setProfileIsUpdated ] = useState(false);
   
   const passwordRef = useRef<HTMLInputElement>(null);
   
@@ -52,7 +52,7 @@ export default function ProfilePage() {
 
     setProfileIsUpdated(false);
 
-    const data: Omit<UpdateUserData, 'uuid'> = {
+    const data: Omit<UpdateUser, 'uuid'> = {
       new_subscriptions: sources
         .filter((item) => item.is_user_subscribed)
         .map((item) => item.uuid),
@@ -119,7 +119,7 @@ export default function ProfilePage() {
         </button>
 
         {profileIsUpdated && (
-          <span className={twUpdateMessage}>Your data was updated!</span>
+          <span className={twUpdateMessage}>Your settings was updated!</span>
         )}
       </form>
     );

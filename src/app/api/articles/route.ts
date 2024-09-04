@@ -1,11 +1,11 @@
 import { headers } from 'next/headers';
 import { NextRequest } from 'next/server';
 
-import { successResponse, errorResponse } from '@/lib/api/responses';
-import { ArrayOfArticlesFromSpiderSchema, PositiveNumberSchema } from '@/lib/types';
-import { ExtendedError } from '@/lib/errors';
+import { successResponse, errorResponse } from '@/utils/api';
+import { ArticleFromSpiderArraySchema, PositiveNumberSchema } from '@/types';
+import { ERRORS, ExtendedError } from '@/utils/errors';
 
-import pg from '@/lib/db/queries';
+import pg from '@/lib/postgres/queries';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,7 +22,7 @@ export const GET = async (req: NextRequest) => {
     const user = await pg.getUserByToken(authToken);
 
     if (!user) {
-      throw new ExtendedError(400, 'Invalid token. Please re-authenticate.');
+      throw new ExtendedError(...ERRORS.invalidToken);
     }
 
     const isSavedBy = req.nextUrl.searchParams.get('find') === 'saved';
@@ -48,18 +48,19 @@ export const POST = async (req: Request) => {
     const user = await pg.getUserByToken(authToken);
 
     if (!user) {
-      throw new ExtendedError(400, 'Invalid token. Please re-authenticate.');
+      throw new ExtendedError(...ERRORS.invalidToken);
     }
 
     if (!user.is_admin) {
-      throw new ExtendedError(403, 'You do not have permission to this action.');
+      throw new ExtendedError(...ERRORS.notAdmin);
     }
 
     const articlesArray = await req.json();
 
-    const result = ArrayOfArticlesFromSpiderSchema.safeParse(articlesArray);
+    const result = ArticleFromSpiderArraySchema.safeParse(articlesArray);
+
     if (!result.success) {
-      throw new ExtendedError(400, 'Invalid articles array received');
+      throw new ExtendedError(...ERRORS.invalidArticles);
     }
 
     await pg.insertArticles(result.data);
@@ -84,15 +85,14 @@ export const DELETE = async (req: NextRequest) => {
     const user = await pg.getUserByToken(authToken);
 
     if (!user) {
-      throw new ExtendedError(400, 'Invalid token. Please re-authenticate.');
+      throw new ExtendedError(...ERRORS.invalidToken);
     }
 
-    const monthsParam = req.nextUrl.searchParams.get('months');
-
-    const result = PositiveNumberSchema.safeParse(monthsParam);
+    const months = req.nextUrl.searchParams.get('months');
+    const result = PositiveNumberSchema.safeParse(months);
 
     if (!result.success) {
-      throw new ExtendedError(400, 'Invalid months param received');
+      throw new ExtendedError(...ERRORS.invalidParam);
     }
 
     const count = await pg.deleteOldArticles(result.data);

@@ -4,10 +4,10 @@ import { FaHeart, FaTrash } from 'react-icons/fa';
 import { twMerge } from 'tailwind-merge';
 import { useRef } from 'react';
 
-import { convertDateToAgo, hideElementWithCollapsing } from '@/lib/frontend/utils/articles';
-import { useSaveArticleMutation, useDeleteArticleMutation } from '@/lib/frontend/store';
-import { classesBeautify } from '@/lib/frontend/utils/styles';
-import { ArticleAtClient } from '@/lib/types';
+import { convertDateToAgo, hideElementWithCollapsing } from '@/utils/articles';
+import { articlesApi } from '@/lib/redux/apis';
+import { classesBeautify } from '@/utils/styles';
+import { ArticleAtClient } from '@/types';
 
 type Props = {
   article: ArticleAtClient;
@@ -22,8 +22,8 @@ export default function ArticleItem({ article, page, onCountDecrease }: Props) {
 
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const [saveArticle] = useSaveArticleMutation();
-  const [deleteArticle] = useDeleteArticleMutation();
+  const [ saveArticle ] = articlesApi.useSaveArticleMutation();
+  const [ deleteArticle ] = articlesApi.useDeleteArticleMutation();
 
   const handleDeleteClick = async () => {
     await hideElementWithCollapsing(containerRef);

@@ -1,7 +1,7 @@
 'use client';
 
 import { FaCheck } from 'react-icons/fa';
-import { classesBeautify } from '@/lib/frontend/utils/styles';
+import { classesBeautify } from '@/utils/styles';
 
 type Props = {
   children: React.ReactNode;

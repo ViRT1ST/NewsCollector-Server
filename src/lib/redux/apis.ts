@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { ROOT_PATH } from '@/constants/public';
+import { ROOT_PATH } from '@/config/public';
 
 const apiBaseUrl = `${ROOT_PATH}/api`;
 
@@ -45,6 +45,14 @@ const usersApi = createApi({
           return {
             method: 'POST',
             url: '/users/logout',
+          };
+        }
+      }),
+      logoutUserEverywhere: builder.mutation<void, void>({
+        query: () => {
+          return {
+            method: 'POST',
+            url: '/users/logout?all=true',
           };
         }
       }),

@@ -3,11 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { useFetchArticlesQuery } from '@/lib/frontend/store';
-import { articlesApi } from '@/lib/frontend/store/apis/backend';
-import { getApiResponse } from '@/lib/frontend/utils/api';
-import { ArticleAtClient } from '@/lib/types';
-import { classesBeautify } from '@/lib/frontend/utils/styles';
+import { articlesApi } from '@/lib/redux/apis';
+import { formatQueryResults } from '@/utils/redux';
+import { classesBeautify } from '@/utils/styles';
+import { ArticleAtClient } from '@/types';
 import ArticleItem from '@/components/article-item';
 import Spinner from '@/components/[common-ui]/spinner';
 import ErrorMessage from '@/components/[common-ui]/error-message';
@@ -22,11 +21,11 @@ type Props = {
 export default function ArticlesList({ page, noArticlesMsg }: Props) {
   const dispatch = useDispatch();
 
-  const { data: response, error, isFetching } = useFetchArticlesQuery(page);
-  const { success, code, data, message } = getApiResponse(response, error);
+  const { data: response, error, isFetching } = articlesApi.useFetchArticlesQuery(page);
+  const { success, code, data, message } = formatQueryResults(response, error);
 
-  const [count, setCount] = useState(0);
-  const [articles, setArticles] = useState<ArticleAtClient[]>([]);
+  const [ count, setCount ] = useState(0);
+  const [ articles, setArticles ] = useState<ArticleAtClient[]>([]);
 
   useEffect(() => {
     if (success) {
