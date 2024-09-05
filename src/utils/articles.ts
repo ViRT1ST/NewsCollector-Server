@@ -23,6 +23,11 @@ async function hideElementWithCollapsing(ref: React.RefObject<HTMLElement>) {
   if (ref.current) {
     const element = ref.current;
 
+    // element.style.cssText += `
+    //   transform-origin: bottom center;
+    //   transition: all 250ms ease;
+    // `;
+
     element.style.cssText = `
       transform-origin: bottom center;
       transition: all 250ms ease;
@@ -40,6 +45,12 @@ async function hideElementWithCollapsing(ref: React.RefObject<HTMLElement>) {
       transform: scaleY(0);
       opacity: 0;
     `;
+
+    // element.style.cssText += `
+    //   opacity: 0.2;
+    // `;
+
+    await sleep(250);
   }
 }
 

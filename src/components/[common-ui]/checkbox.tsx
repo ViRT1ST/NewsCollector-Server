@@ -38,9 +38,10 @@ const twContainer = classesBeautify(`
 
 const twInput = classesBeautify(`
   relative w-5 h-5 
-  bg-white/60 peer shrink-0 appearance-none border-0 rounded
+  bg-white/60 peer shrink-0 appearance-none border border-transparent rounded
   hover:outline-0
   hover:[box-shadow:0px_0px_0px_4px_rgba(128,128,128,0.3)]
+  
 `);
 
 const twLabel = classesBeautify(`

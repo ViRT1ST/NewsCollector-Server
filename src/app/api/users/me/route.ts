@@ -2,7 +2,7 @@ import { headers } from 'next/headers';
 
 import { successResponse, errorResponse } from '@/utils/api';
 import { ERRORS, ExtendedError } from '@/utils/errors';
-import { UpdateUserSchema, UpdateUserData } from '@/types';
+import { UpdateUserSchema, UpdateUser } from '@/types';
 import { convertZodErrorsToMsgArray } from '@/utils/zod';
 import pg from '@/lib/postgres/queries';
 
@@ -89,7 +89,7 @@ export const PATCH = async (req: Request) => {
       throw new ExtendedError(...ERRORS.invalidToken);
     }
 
-    const body: Omit<UpdateUserData, 'uuid'> = await req.json();
+    const body: Omit<UpdateUser, 'uuid'> = await req.json();
 
     const result = UpdateUserSchema.safeParse({
       uuid: user.uuid,
@@ -103,7 +103,7 @@ export const PATCH = async (req: Request) => {
       throw new ExtendedError(400, errorMessages.join(' | '));
     }
 
-    const updateUserData: UpdateUserData = {
+    const updateUserData: UpdateUser = {
       uuid: user.uuid
     };
 

@@ -10,7 +10,7 @@
     "populate": "node --trace-warnings lib/backend/populate/run.js"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^2.2.7",
+    "@reduxjs/toolkit": "^2.2.6",
     "@vercel/postgres": "^0.9.0",
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",

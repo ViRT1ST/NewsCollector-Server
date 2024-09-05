@@ -1,11 +1,10 @@
-import PageInner from '@/components/[common-ui]/page-inner';
+import Theme from '@/components/[containers]/theme';
 import ErrorMessage from '@/components/[common-ui]/error-message';
 
-// this code must be not in root not-found.tsx because it need access to redux
-export default function Themed404Page() {
+export default function Page404() {
   return (
-    <PageInner privateRoute={false}>
+    <Theme>
       <ErrorMessage code={404} message={'Page not found'} />
-    </PageInner>
+    </Theme>
   );
 }

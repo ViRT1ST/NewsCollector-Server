@@ -4,18 +4,19 @@ import { FaHeart, FaTrash } from 'react-icons/fa';
 import { twMerge } from 'tailwind-merge';
 import { useRef } from 'react';
 
-import { convertDateToAgo, hideElementWithCollapsing } from '@/utils/articles';
+import { ArticleAtClient } from '@/types';
 import { articlesApi } from '@/lib/redux/apis';
 import { classesBeautify } from '@/utils/styles';
-import { ArticleAtClient } from '@/types';
+import { convertDateToAgo, hideElementWithCollapsing } from '@/utils/articles';
+import ArticlesListButton from '@/components/articles/articles-list-button';
 
 type Props = {
   article: ArticleAtClient;
   page: string;
-  onCountDecrease: () => void;
+  onRemoveFromList: (uuid: string) => void;
 };
 
-export default function ArticleItem({ article, page, onCountDecrease }: Props) {
+export default function ArticleItem({ article, page, onRemoveFromList }: Props) {
   const { uuid, site, section, title, url, created_at } = article;
 
   const isSavedPage = page === 'saved';
@@ -25,15 +26,18 @@ export default function ArticleItem({ article, page, onCountDecrease }: Props) {
   const [ saveArticle ] = articlesApi.useSaveArticleMutation();
   const [ deleteArticle ] = articlesApi.useDeleteArticleMutation();
 
-  const handleDeleteClick = async () => {
+  async function removeFromList(uuid: string) {
     await hideElementWithCollapsing(containerRef);
-    onCountDecrease();
+    onRemoveFromList(uuid);
+  };
+
+  async function handleDeleteClick() {
+    await removeFromList(uuid);
     deleteArticle(uuid);
   };
 
   const handleSaveClick = async () => {
-    await hideElementWithCollapsing(containerRef);
-    onCountDecrease();
+    await removeFromList(uuid);
     saveArticle(uuid);
   };
 
@@ -44,29 +48,21 @@ export default function ArticleItem({ article, page, onCountDecrease }: Props) {
         <time className={twTime}>{convertDateToAgo(created_at)}</time>
         <span className={twSource}>{site} &middot; {section}</span>
         <div className={twActions}>
-          <button
-            className={twMerge(
-              twButton,
-              isSavedPage && `invisible`,
-            )}
+          <ArticlesListButton
+            className={twMerge(isSavedPage && `invisible`)}
             onClick={handleSaveClick}
+            danger={false}
           >
             <span className={twButtonIcon}><FaHeart /></span>
             <span className={twButtonText}>SAVE</span>
-          </button>
-          <button
-            className={twMerge(
-              twButton, `
-                hover:text-lt-btn-danger-fg hover:dark:text-dt-btn-danger-fg
-                hover:bg-dt-btn-danger-bg hover:dark:bg-dt-btn-danger-bg
-                hover:border-dt-btn-danger-bg hover:dark:border-dt-btn-danger-bg
-              `
-            )}
+          </ArticlesListButton>
+          <ArticlesListButton
             onClick={handleDeleteClick}
+            danger={true}
           >
             <span className={twButtonIcon}><FaTrash /></span>
             <span className={twButtonText}>DELETE</span>
-          </button>
+          </ArticlesListButton>
         </div>
       </div>
 
@@ -108,20 +104,6 @@ const twSource = classesBeautify(`
 
 const twActions = classesBeautify(`
   flex flex-row justify-end
-`);
-
-const twButton = classesBeautify(`
-  flex items-center
-  border rounded font-roboto font-medium text-[0.8rem] leading-4
-  bg-lt-btn-default-bg/10 dark:bg-dt-btn-default-bg/[0.03]
-  text-lt-btn-default-fg dark:text-dt-btn-default-fg
-  border-lt-btn-default-bg/30 dark:border-dt-btn-default-bg/30
-  hover:text-lt-btn-safe-fg hover:dark:text-dt-btn-safe-fg
-  hover:bg-lt-btn-safe-bg hover:dark:bg-dt-btn-safe-bg
-  hover:border-lt-btn-safe-bg hover:dark:border-dt-btn-safe-bg
-  ml-1.5 md:ml-2
-  py-1 md:py-1
-  px-2 md:px-3
 `);
 
 const twButtonIcon = classesBeautify(`

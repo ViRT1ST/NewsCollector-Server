@@ -142,7 +142,7 @@ async function getArticlesForUser(userUuid: string, isSavedBy: boolean) {
     FROM nc_articles
     WHERE $1 = ANY(${isSavedBy ? 'saved_by' : 'unreaded_by'})
     ORDER BY site, section, title
-    LIMIT 100;
+    LIMIT 50;
   `;
 
   const { rows } = await executeQuery(query, [userUuid]);

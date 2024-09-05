@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 
-export default function NotFoundPage() {
+export default function MainPage() {
   redirect('/page/error');
-}
+};
+

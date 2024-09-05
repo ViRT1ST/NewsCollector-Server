@@ -21,7 +21,7 @@ const accountSlice = createSlice({
   }
 });
 
-const accountActions = { ...accountSlice.actions };
+const accountActions = accountSlice.actions;
 
 export {
   accountSlice,

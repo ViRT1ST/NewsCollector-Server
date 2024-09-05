@@ -1,5 +1,5 @@
-import ArticlesList from '@/components/articles-list';
-import PageInner from '@/components/[common-ui]/page-inner';
+import ArticlesList from '@/components/articles/articles-list';
+import PageStructure from '@/components/[containers]/page-structure';
 import type { Slug } from '@/types';
 
 const pageConfig = {
@@ -16,8 +16,8 @@ export default function SavedPage({ params }: Slug) {
   const noArticlesMsg = pageConfig[page].noArticlesMsg;
 
   return (
-    <PageInner>
+    <PageStructure>
       <ArticlesList page={page} noArticlesMsg={noArticlesMsg} />
-    </PageInner>
+    </PageStructure>
   );
 }
