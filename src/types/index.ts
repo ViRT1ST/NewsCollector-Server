@@ -10,7 +10,6 @@ export type DbUser = {
   id: number;
   uuid: string;
   email: string;
-  email_lowercase: string;
   password: string;
   is_admin: string;
   subscriptions: string[];
@@ -70,6 +69,10 @@ export type CatchAllSlug = {
   }
 };
 
+export type ObjectWithAnyData = {
+  [key: string]: any;
+};
+
 /* =============================================================
 Other
 ============================================================= */
@@ -107,6 +110,15 @@ export type ApiResponse = {
 };
 
 export type ArticleAtClient = {
+  uuid: string;
+  site: string;
+  section: string;
+  title: string;
+  url: string;
+  created_at: string;
+};
+
+export type ArticleAtClientWithDateObject = {
   uuid: string;
   site: string;
   section: string;

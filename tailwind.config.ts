@@ -12,7 +12,7 @@ module.exports = {
         'lt-page-gradient': 'linear-gradient(to right, #d397ad, #b38fbc, #729abb)',
       },
       colors: {
-        'lt-page-bg': '#b6b2af',
+        'lt-page-bg': '#c2bfbc',
         'lt-page-fg': '#000',
         'lt-nav-bg': '#dbd8d7',
         'lt-nav-fg': '#000',
@@ -39,7 +39,7 @@ module.exports = {
         'dt-article-fg-link-normal': '#8998b4',
         'dt-article-fg-link-visited': '#3e515b',
         'dt-btn-default-fg': '#8da885',
-        'dt-btn-default-bg': '#8da885',
+        'dt-btn-default-bg': '#fff',
         'dt-btn-danger-fg': '#fff',
         'dt-btn-danger-bg': '#dc3545',
         'dt-btn-safe-fg': '#fff',

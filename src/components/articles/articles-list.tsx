@@ -3,10 +3,12 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { ArticleAtClient } from '@/types';
 import { articlesApi } from '@/lib/redux/apis';
 import { formatQueryResults } from '@/utils/redux';
 import { classesBeautify } from '@/utils/styles';
-import { ArticleAtClient } from '@/types';
+import { sortArticlesByDate, sortArticlesBySite } from '@/utils/articles';
+import { getCookies, setCookies } from '@/utils/cookies';
 import ArticleItem from '@/components/articles/articles-list-item';
 import Spinner from '@/components/[common-ui]/spinner';
 import ErrorMessage from '@/components/[common-ui]/error-message';
@@ -22,21 +24,49 @@ type Props = {
 export default function ArticlesList({ page, noArticlesMsg }: Props) {
   const dispatch = useDispatch();
 
-  const { data: response, error, isFetching } = articlesApi.useFetchArticlesQuery(page);
+  const { data: response, error, isFetching, refetch } = articlesApi.useFetchArticlesQuery(page);
   const { success, code, data, message } = formatQueryResults(response, error);
 
   const [ articles, setArticles ] = useState<ArticleAtClient[]>([]);
 
   useEffect(() => {
-    if (success) {
+    if (!isFetching && success) {
+      const sorting = getCookies()['articles-sorting'];
       setArticles(data);
-
+      sortArticles(sorting, false);
+      
       return () => {
         dispatch(articlesApi.util.resetApiState());
       };
     }
 
-  }, [success]);
+  }, [isFetching, success]);
+
+  function handleRefresh() {
+    setArticles([]);
+    refetch();
+  }
+
+  function sortArticles(sorting: string, createCookie = true) {
+    const array = articles.length !== 0 ? [...articles] : [...data];
+
+    if (sorting === 'date-asc') {
+      setArticles(sortArticlesByDate(array, 'asc'));
+      createCookie && setCookies({ 'articles-sorting': 'date-asc' });
+
+    } else if (sorting === 'date-desc') {
+      setArticles(sortArticlesByDate(array, 'desc'));
+      createCookie && setCookies({ 'articles-sorting': 'date-desc' });
+
+    } else if (sorting === 'site-asc') {
+      setArticles(sortArticlesBySite(array, 'asc'));
+      createCookie && setCookies({ 'articles-sorting': 'site-asc' });
+
+    } else if (sorting === 'site-desc') {
+      setArticles(sortArticlesBySite(array, 'desc'));
+      createCookie && setCookies({ 'articles-sorting': 'site-desc' });
+    }
+  }
 
   async function removeArticleFromList(articleUuid: string) {
     const newArticles = articles.filter((item) => item.uuid !== articleUuid);
@@ -69,25 +99,35 @@ export default function ArticlesList({ page, noArticlesMsg }: Props) {
         <div className={twListHeaderContainer}>
           <div className={twListHeaderItem}>
             <span className={twListHeaderItemText}>
-              {articles.length} ARTICLES IN CURRENT LIST
+              {articles.length} LINKS IN CURRENT LIST
             </span>
-            <ArticlesListButton white={true}>REFRESH</ArticlesListButton>
+            <ArticlesListButton onClick={handleRefresh} white={true}>
+              REFRESH
+            </ArticlesListButton>
           </div>
 
           <div className={twListHeaderItem}>
             <span className={twListHeaderItemText}>
               SORT BY SITE
             </span>
-            <ArticlesListButton white={true}>ASC</ArticlesListButton>
-            <ArticlesListButton white={true}>DESC</ArticlesListButton>
+            <ArticlesListButton onClick={() => sortArticles('site-asc')} white={true}>
+              ASC
+            </ArticlesListButton>
+            <ArticlesListButton onClick={() => sortArticles('site-desc')} white={true}>
+              DESC
+            </ArticlesListButton>
           </div>
 
           <div className={twListHeaderItem}>
             <span className={twListHeaderItemText}>
               SORT BY DATE
             </span>
-            <ArticlesListButton white={true}>ASC</ArticlesListButton>
-            <ArticlesListButton white={true}>DESC</ArticlesListButton>
+            <ArticlesListButton onClick={() => sortArticles('date-asc')} white={true}>
+              ASC
+            </ArticlesListButton>
+            <ArticlesListButton onClick={() => sortArticles('date-desc')} white={true}>
+              DESC
+            </ArticlesListButton>
           </div>
         </div>
 
@@ -109,12 +149,9 @@ export default function ArticlesList({ page, noArticlesMsg }: Props) {
   return renderContent();
 }
 
-//bg-dt-article-bg-a
-//px-2 md:px-3.5
-//mb-4 2xl:mb-[1px]
 const twListHeaderContainer = classesBeautify(`
   flex justify-between py-1.5 w-full
-  text-white/70  border rounded border-transparent
+  border rounded border-transparent
   flex-col lg:flex-row
   gap-4 lg:gap-8
   mb-4 2xl:mb-2
@@ -127,7 +164,8 @@ const twListHeaderItem = classesBeautify(`
 `);
 
 const twListHeaderItemText = classesBeautify(`
-  text-white/50 font-roboto text-[0.8rem] font-medium 
+  font-roboto text-[0.8rem] font-medium
+  text-lt-btn-default-fg dark:text-white/50
 `);
 
 const twNoNewsMessage = classesBeautify(`

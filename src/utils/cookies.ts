@@ -12,11 +12,11 @@ function createCookieOptions() {
   return options;
 }
 
-function getCookies() {
+export function getCookies() {
   return new Cookies().getAll();
 }
 
-function createCookies(obj: object) {
+export function setCookies(obj: object) {
   const cookies = new Cookies();
 
   Object.entries(obj).forEach(([key, value]) => {
@@ -25,14 +25,8 @@ function createCookies(obj: object) {
   });
 }
 
-function removeCookies(arr: string[]) {
+export function removeCookies(arr: string[]) {
   const cookies = new Cookies();
   
   arr.forEach((item) => cookies.remove(item, { path: '/' }));
 }
-
-export {
-  getCookies,
-  createCookies,
-  removeCookies
-};

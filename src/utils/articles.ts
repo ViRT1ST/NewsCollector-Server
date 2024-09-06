@@ -1,4 +1,9 @@
-function convertDateToAgo(time: Date | string) {
+import { ArticleAtClient, ArticleAtClientWithDateObject } from '@/types';
+
+type tempArticlesType = ArticleAtClient[] | ArticleAtClientWithDateObject[]
+type Direction = 'asc' | 'desc'
+
+export function convertDateToAgo(time: Date | string) {
   const date = new Date(time);
   const now = new Date();
 
@@ -15,18 +20,57 @@ function convertDateToAgo(time: Date | string) {
   return parseInt(h) > 100 ? '100hrs+ ago' : `${h}h:${m}m ago`;
 }
 
+function convertArticlesWithStringDatesToObjectDates(articles: ArticleAtClient[]) {
+  return articles.map((item) => ({ ...item, created_at: new Date(item.created_at) }));
+}
+
+function convertArticlesWithObjectDatesToStringDates(articles: ArticleAtClientWithDateObject[]) {
+  return articles.map((item) => ({ ...item, created_at: item.created_at.toISOString()}));
+}
+
+function sortArticlesByTitle(articles: ArticleAtClient[]) {
+  let newArticles: ArticleAtClient[] = [...articles];
+  return newArticles.sort((a, b) => a.title.localeCompare(b.title));
+}
+
+export function sortArticlesByDate(articles: ArticleAtClient[], direction: Direction) {
+  let newArticles: tempArticlesType = [...articles];
+
+  newArticles = sortArticlesByTitle(newArticles);
+  newArticles = convertArticlesWithStringDatesToObjectDates(newArticles);
+
+  if (direction === 'asc') {
+    newArticles = newArticles.sort((a, b) => b.created_at.getTime() - a.created_at.getTime());
+  } else {
+    newArticles = newArticles.sort((a, b) => a.created_at.getTime() - b.created_at.getTime());
+  }
+  
+  newArticles = convertArticlesWithObjectDatesToStringDates(newArticles);
+
+  return newArticles;
+}
+
+export function sortArticlesBySite(articles: ArticleAtClient[], direction: Direction) {
+  let newArticles: ArticleAtClient[] = [...articles];
+
+  newArticles = sortArticlesByTitle(newArticles);
+
+  if (direction === 'asc') {
+    newArticles = newArticles.sort((a, b) => a.site.localeCompare(b.site));
+  } else {
+    newArticles = newArticles.sort((a, b) => b.site.localeCompare(a.site));
+  }
+
+  return newArticles;
+}
+
 function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function hideElementWithCollapsing(ref: React.RefObject<HTMLElement>) {
+export async function hideElementWithCollapsing(ref: React.RefObject<HTMLElement>) {
   if (ref.current) {
     const element = ref.current;
-
-    // element.style.cssText += `
-    //   transform-origin: bottom center;
-    //   transition: all 250ms ease;
-    // `;
 
     element.style.cssText = `
       transform-origin: bottom center;
@@ -46,15 +90,6 @@ async function hideElementWithCollapsing(ref: React.RefObject<HTMLElement>) {
       opacity: 0;
     `;
 
-    // element.style.cssText += `
-    //   opacity: 0.2;
-    // `;
-
     await sleep(250);
   }
 }
-
-export {
-  convertDateToAgo,
-  hideElementWithCollapsing
-};

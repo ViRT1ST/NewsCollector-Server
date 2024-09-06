@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 import { accountActions } from '@/lib/redux/slices';
 import { usersApi } from '@/lib/redux/apis';
-import { createCookies } from '@/utils/cookies';
+import { setCookies } from '@/utils/cookies';
 import { classesBeautify } from '@/utils/styles';
 
 const authConfig: any = {
@@ -47,7 +47,7 @@ export default function AuthForm() {
 
       const userData = { uuid, email, token };
       dispatch(accountActions.updateData(userData));
-      createCookies(userData);
+      setCookies(userData);
 
       router.push('/page/articles/unreaded');
     }
