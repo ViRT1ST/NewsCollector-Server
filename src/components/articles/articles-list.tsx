@@ -28,13 +28,19 @@ export default function ArticlesList({ page, noArticlesMsg }: Props) {
   const { success, code, data, message } = formatQueryResults(response, error);
 
   const [ articles, setArticles ] = useState<ArticleAtClient[]>([]);
+  const [ autoRefreshAtZero, setAutoRefreshAtZero ] = useState(true);
 
   useEffect(() => {
     if (!isFetching && success) {
-      const sorting = getCookies()['articles-sorting'];
-      setArticles(data);
-      sortArticles(sorting, false);
-      
+      if (data && data.length !== 0) {
+        setArticles(data);
+        
+        const sorting = getCookies()['articles-sorting'];
+        sortArticles(sorting, false);
+
+        setAutoRefreshAtZero(true);
+      }
+
       return () => {
         dispatch(articlesApi.util.resetApiState());
       };
@@ -42,7 +48,15 @@ export default function ArticlesList({ page, noArticlesMsg }: Props) {
 
   }, [isFetching, success]);
 
-  function handleRefresh() {
+  useEffect(() => {
+    if (articles.length === 0 && autoRefreshAtZero) {
+      refreshList();
+      setAutoRefreshAtZero(false);
+    }
+
+  }, [articles]);
+
+  function refreshList() {
     setArticles([]);
     refetch();
   }
@@ -101,7 +115,7 @@ export default function ArticlesList({ page, noArticlesMsg }: Props) {
             <span className={twListHeaderItemText}>
               {articles.length} LINKS IN CURRENT LIST
             </span>
-            <ArticlesListButton onClick={handleRefresh} white={true}>
+            <ArticlesListButton onClick={refreshList} white={true}>
               REFRESH
             </ArticlesListButton>
           </div>

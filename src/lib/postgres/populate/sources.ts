@@ -47,7 +47,7 @@ export const defaultSources = [
     uuid: '16cf9dcf-08a9-47c0-a372-8a06b78ef167',
     site: 'Freelancer',
     section: 'Selected Skills',
-    url: 'https://www.freelancer.com/jobs/nodejs_windows_web-scraping_javascript_expressjs_api_mongodb/?results=100&languages=en,ru',
+    url: 'https://www.freelancer.com/jobs/nodejs_javascript_expressjs_api_nextjs_webdev_react-js_web-development_frontend-development_typescript_postgresql_rest-api/?results=100&languages=en',
     parsing_method: 'html',
     regex: '^.*?freelancer.com/projects/.*?/.*?$',
     remove_in_title: '| Freelancer',
@@ -63,7 +63,7 @@ export const defaultSources = [
     regex: '^.*?videocardz.com/(newz|press-release)/[a-zA-Z0-9-]{1,200}$',
     remove_in_title: '- VideoCardz.com',
     translate_title: false,
-    enabled: true,
+    enabled: false,
   },
   {
     uuid: '5564ad1e-d91b-49b9-9dd2-2fe5c28f0e2d',

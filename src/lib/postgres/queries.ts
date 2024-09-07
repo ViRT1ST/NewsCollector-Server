@@ -54,6 +54,7 @@ async function createSourcesTable() {
       url TEXT,
       parsing_method TEXT,
       regex TEXT,
+      keywords_policy TEXT DEFAULT NULL,
       remove_in_title TEXT,
       translate_title BOOLEAN,
       enabled BOOLEAN
@@ -77,7 +78,7 @@ async function createArticlesTable() {
       section TEXT,
       title TEXT,
       url TEXT,
-      source_uuid UUID REFERENCES sources(uuid),
+      source_uuid UUID REFERENCES nc_sources(uuid),
       unreaded_by UUID[] DEFAULT '{}',
       saved_by UUID[] DEFAULT '{}',
       created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()

@@ -30,6 +30,7 @@ export type DbSource = {
   url: string;
   parsing_method: string;
   regex: string;
+  keywords_policy: string | null;
   remove_in_title: string;
   translate_title: boolean;
   enabled: boolean;
