@@ -28,18 +28,13 @@ export default function ArticlesList({ page, noArticlesMsg }: Props) {
   const { success, code, data, message } = formatQueryResults(response, error);
 
   const [ articles, setArticles ] = useState<ArticleAtClient[]>([]);
-  const [ autoRefreshAtZero, setAutoRefreshAtZero ] = useState(true);
+  const [ autoRefreshOnZero, setAutoRefreshOnZero ] = useState(true);
 
   useEffect(() => {
-    if (!isFetching && success) {
-      if (data && data.length !== 0) {
-        setArticles(data);
-        
-        const sorting = getCookies()['articles-sorting'];
-        sortArticles(sorting, false);
-
-        setAutoRefreshAtZero(true);
-      }
+    if (!isFetching && success && data && data.length !== 0) {
+      // set articles and reset auto refresh boolean
+      setAutoRefreshOnZero(true);
+      setArticles(data);
 
       return () => {
         dispatch(articlesApi.util.resetApiState());
@@ -49,37 +44,43 @@ export default function ArticlesList({ page, noArticlesMsg }: Props) {
   }, [isFetching, success]);
 
   useEffect(() => {
-    if (articles.length === 0 && autoRefreshAtZero) {
-      refreshList();
-      setAutoRefreshAtZero(false);
+    // auto refresh one time if there is no articles
+    if (articles.length === 0 && autoRefreshOnZero) {
+      setAutoRefreshOnZero(false);
+      refetchArticles();
     }
 
+    // sort articles after receiving data
+    if (articles.length === data?.length) {
+      const sorting = getCookies()['articles-sorting'];
+      sortArticles(sorting, false);
+    }
   }, [articles]);
 
-  function refreshList() {
+  function refetchArticles() {
     setArticles([]);
     refetch();
   }
 
-  function sortArticles(sorting: string, createCookie = true) {
-    const array = articles.length !== 0 ? [...articles] : [...data];
-
-    if (sorting === 'date-asc') {
-      setArticles(sortArticlesByDate(array, 'asc'));
-      createCookie && setCookies({ 'articles-sorting': 'date-asc' });
-
-    } else if (sorting === 'date-desc') {
-      setArticles(sortArticlesByDate(array, 'desc'));
-      createCookie && setCookies({ 'articles-sorting': 'date-desc' });
-
-    } else if (sorting === 'site-asc') {
-      setArticles(sortArticlesBySite(array, 'asc'));
-      createCookie && setCookies({ 'articles-sorting': 'site-asc' });
-
-    } else if (sorting === 'site-desc') {
-      setArticles(sortArticlesBySite(array, 'desc'));
-      createCookie && setCookies({ 'articles-sorting': 'site-desc' });
-    }
+  function sortArticles(sorting: string | null, createCookie = true) {
+    if (articles.length !== 0) {
+      if (sorting === 'date-asc') {
+        setArticles(sortArticlesByDate(articles, 'asc'));
+        createCookie && setCookies({ 'articles-sorting': 'date-asc' });
+  
+      } else if (sorting === 'date-desc') {
+        setArticles(sortArticlesByDate(articles, 'desc'));
+        createCookie && setCookies({ 'articles-sorting': 'date-desc' });
+  
+      } else if (sorting === 'site-asc') {
+        setArticles(sortArticlesBySite(articles, 'asc'));
+        createCookie && setCookies({ 'articles-sorting': 'site-asc' });
+  
+      } else if (sorting === 'site-desc') {
+        setArticles(sortArticlesBySite(articles, 'desc'));
+        createCookie && setCookies({ 'articles-sorting': 'site-desc' });
+      }
+    };
   }
 
   async function removeArticleFromList(articleUuid: string) {
@@ -115,7 +116,7 @@ export default function ArticlesList({ page, noArticlesMsg }: Props) {
             <span className={twListHeaderItemText}>
               {articles.length} LINKS IN CURRENT LIST
             </span>
-            <ArticlesListButton onClick={refreshList} white={true}>
+            <ArticlesListButton onClick={refetchArticles} white={true}>
               REFRESH
             </ArticlesListButton>
           </div>
