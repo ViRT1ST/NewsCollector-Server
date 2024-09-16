@@ -28,25 +28,26 @@ export default function ArticlesList({ page, noArticlesMsg }: Props) {
   const { success, code, data, message } = formatQueryResults(response, error);
 
   const [ articles, setArticles ] = useState<ArticleAtClient[]>([]);
-  const [ autoRefreshOnZero, setAutoRefreshOnZero ] = useState(true);
+  const [ mustRefreshOnZero, setMustRefreshOnZero ] = useState(true);
 
   useEffect(() => {
-    if (!isFetching && success && data && data.length !== 0) {
-      // set articles and reset auto refresh boolean
-      setAutoRefreshOnZero(true);
-      setArticles(data);
+    if (!isFetching) {
+      if (data && data.length !== 0) {
+        setArticles(data);
+        setMustRefreshOnZero(true);
+      } else {
+        setArticles([]);
+        setMustRefreshOnZero(false);
+      }
 
       return () => {
         dispatch(articlesApi.util.resetApiState());
       };
     }
-
-  }, [isFetching, success]);
+  }, [isFetching]);
 
   useEffect(() => {
-    // auto refresh one time if there is no articles
-    if (articles.length === 0 && autoRefreshOnZero) {
-      setAutoRefreshOnZero(false);
+    if (articles.length === 0 && mustRefreshOnZero && !isFetching) {
       refetchArticles();
     }
 
@@ -55,11 +56,10 @@ export default function ArticlesList({ page, noArticlesMsg }: Props) {
       const sorting = getCookies()['articles-sorting'];
       sortArticles(sorting, false);
     }
-  }, [articles]);
+  }, [articles.length]);
 
   function refetchArticles() {
-    setArticles([]);
-    refetch();
+    setTimeout(() => refetch(), 300);
   }
 
   function sortArticles(sorting: string | null, createCookie = true) {
@@ -84,8 +84,7 @@ export default function ArticlesList({ page, noArticlesMsg }: Props) {
   }
 
   async function removeArticleFromList(articleUuid: string) {
-    const newArticles = articles.filter((item) => item.uuid !== articleUuid);
-    setArticles(newArticles);
+    setArticles((prev) => prev.filter((item) => item.uuid !== articleUuid));
   };
 
   function renderContent() {
@@ -101,64 +100,68 @@ export default function ArticlesList({ page, noArticlesMsg }: Props) {
       );
     }
   
-    if (success && articles.length === 0) {
+    if (articles.length === 0 && !mustRefreshOnZero) {
       return (
         <p className={twNoNewsMessage}>
           {noArticlesMsg}
         </p>
       );
     }
+
+    if (success && articles.length !== 0) {
+      return (
+        <>
+          <div className={twListHeaderContainer}>
+            <div className={twListHeaderItem}>
+              <span className={twListHeaderItemText}>
+                {articles.length} LINKS IN CURRENT LIST
+              </span>
+              <ArticlesListButton onClick={refetchArticles} white={true}>
+                REFRESH
+              </ArticlesListButton>
+            </div>
+  
+            <div className={twListHeaderItem}>
+              <span className={twListHeaderItemText}>
+                SORT BY SITE
+              </span>
+              <ArticlesListButton onClick={() => sortArticles('site-asc')} white={true}>
+                ASC
+              </ArticlesListButton>
+              <ArticlesListButton onClick={() => sortArticles('site-desc')} white={true}>
+                DESC
+              </ArticlesListButton>
+            </div>
+  
+            <div className={twListHeaderItem}>
+              <span className={twListHeaderItemText}>
+                SORT BY DATE
+              </span>
+              <ArticlesListButton onClick={() => sortArticles('date-asc')} white={true}>
+                ASC
+              </ArticlesListButton>
+              <ArticlesListButton onClick={() => sortArticles('date-desc')} white={true}>
+                DESC
+              </ArticlesListButton>
+            </div>
+          </div>
+  
+          <ul>
+            {articles.map((article) => (
+              <li key={article.uuid}>
+                <ArticleItem
+                  article={article}
+                  page={page}
+                  onRemoveFromList={removeArticleFromList}
+                />
+              </li>
+            ))}
+          </ul>
+        </>
+      ); 
+    }
     
-    return (
-      <>
-        <div className={twListHeaderContainer}>
-          <div className={twListHeaderItem}>
-            <span className={twListHeaderItemText}>
-              {articles.length} LINKS IN CURRENT LIST
-            </span>
-            <ArticlesListButton onClick={refetchArticles} white={true}>
-              REFRESH
-            </ArticlesListButton>
-          </div>
-
-          <div className={twListHeaderItem}>
-            <span className={twListHeaderItemText}>
-              SORT BY SITE
-            </span>
-            <ArticlesListButton onClick={() => sortArticles('site-asc')} white={true}>
-              ASC
-            </ArticlesListButton>
-            <ArticlesListButton onClick={() => sortArticles('site-desc')} white={true}>
-              DESC
-            </ArticlesListButton>
-          </div>
-
-          <div className={twListHeaderItem}>
-            <span className={twListHeaderItemText}>
-              SORT BY DATE
-            </span>
-            <ArticlesListButton onClick={() => sortArticles('date-asc')} white={true}>
-              ASC
-            </ArticlesListButton>
-            <ArticlesListButton onClick={() => sortArticles('date-desc')} white={true}>
-              DESC
-            </ArticlesListButton>
-          </div>
-        </div>
-
-        <ul>
-          {articles.map((article) => (
-            <li key={article.uuid}>
-              <ArticleItem
-                article={article}
-                page={page}
-                onRemoveFromList={removeArticleFromList}
-              />
-            </li>
-          ))}
-        </ul>
-      </>
-    ); 
+    return null;
   }
 
   return renderContent();

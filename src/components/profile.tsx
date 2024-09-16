@@ -24,10 +24,10 @@ export default function Profile() {
   const passwordRef = useRef<HTMLInputElement>(null);
   
   useEffect(() => {
-    if (success) {
+    if (!isFetching && data && data.length !== 0) {
       setSources(data.sources);
     }
-  }, [success]);
+  }, [isFetching]);
 
   useEffect(() => {
     if (updateResults.status === 'fulfilled') {

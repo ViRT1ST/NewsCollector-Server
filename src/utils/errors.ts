@@ -13,7 +13,7 @@ export class ExtendedError extends Error {
 
 export const ERRORS: Record<string, [number, string]> = {
   zodNotEmail: [
-    404, 'Valid email is required'
+    400, 'Valid email is required'
   ],
   zodBadEmail: [
     400, 'Email must be at least 5 characters'
@@ -31,7 +31,7 @@ export const ERRORS: Record<string, [number, string]> = {
     400, 'Invalid password'
   ],
   invalidToken: [
-    400, 'Invalid token. Please re-authenticate'
+    401, 'Invalid token. Please re-authenticate'
   ],
   notAdmin: [
     403, 'You do not have permission to this action'
