@@ -33,7 +33,9 @@ export default function ArticlesList({ page, noArticlesMsg }: Props) {
   useEffect(() => {
     if (!isFetching) {
       if (data && data.length !== 0) {
-        setArticles(data);
+        const sortingFromCookie = getCookies()['articles-sorting'];
+        const sortedArticles = getSortedArticles(data, sortingFromCookie);
+        setArticles(sortedArticles);
         setMustRefreshOnZero(true);
       } else {
         setArticles([]);
@@ -44,43 +46,42 @@ export default function ArticlesList({ page, noArticlesMsg }: Props) {
         dispatch(articlesApi.util.resetApiState());
       };
     }
+    
   }, [isFetching]);
 
   useEffect(() => {
     if (articles.length === 0 && mustRefreshOnZero && !isFetching) {
       refetchArticles();
     }
-
-    // sort articles after receiving data
-    if (articles.length === data?.length) {
-      const sorting = getCookies()['articles-sorting'];
-      sortArticles(sorting, false);
-    }
   }, [articles.length]);
 
   function refetchArticles() {
-    setTimeout(() => refetch(), 300);
+    setTimeout(() => {
+      setArticles([]);
+      refetch();
+    }, 300);
   }
 
-  function sortArticles(sorting: string | null, createCookie = true) {
+  function getSortedArticles(articles: ArticleAtClient[], sorting: string | null) {
+    if (sorting === 'date-asc') {
+      return sortArticlesByDate(articles, 'asc');
+    } else if (sorting === 'date-desc') {
+      return sortArticlesByDate(articles, 'desc');
+    } else if (sorting === 'site-asc') {
+      return sortArticlesBySite(articles, 'asc');
+    } else if (sorting === 'site-desc') {
+      return sortArticlesBySite(articles, 'desc');
+    } else {
+      return articles;
+    }
+  }
+
+  function sortCurrentArticles(sorting: string | null, createCookie = true) {
     if (articles.length !== 0) {
-      if (sorting === 'date-asc') {
-        setArticles(sortArticlesByDate(articles, 'asc'));
-        createCookie && setCookies({ 'articles-sorting': 'date-asc' });
-  
-      } else if (sorting === 'date-desc') {
-        setArticles(sortArticlesByDate(articles, 'desc'));
-        createCookie && setCookies({ 'articles-sorting': 'date-desc' });
-  
-      } else if (sorting === 'site-asc') {
-        setArticles(sortArticlesBySite(articles, 'asc'));
-        createCookie && setCookies({ 'articles-sorting': 'site-asc' });
-  
-      } else if (sorting === 'site-desc') {
-        setArticles(sortArticlesBySite(articles, 'desc'));
-        createCookie && setCookies({ 'articles-sorting': 'site-desc' });
-      }
-    };
+      createCookie && setCookies({ 'articles-sorting': sorting });
+      const newArticles = getSortedArticles(articles, sorting);
+      setArticles(newArticles);
+    }
   }
 
   async function removeArticleFromList(articleUuid: string) {
@@ -125,10 +126,10 @@ export default function ArticlesList({ page, noArticlesMsg }: Props) {
               <span className={twListHeaderItemText}>
                 SORT BY SITE
               </span>
-              <ArticlesListButton onClick={() => sortArticles('site-asc')} white={true}>
+              <ArticlesListButton onClick={() => sortCurrentArticles('site-asc')} white={true}>
                 ASC
               </ArticlesListButton>
-              <ArticlesListButton onClick={() => sortArticles('site-desc')} white={true}>
+              <ArticlesListButton onClick={() => sortCurrentArticles('site-desc')} white={true}>
                 DESC
               </ArticlesListButton>
             </div>
@@ -137,10 +138,10 @@ export default function ArticlesList({ page, noArticlesMsg }: Props) {
               <span className={twListHeaderItemText}>
                 SORT BY DATE
               </span>
-              <ArticlesListButton onClick={() => sortArticles('date-asc')} white={true}>
+              <ArticlesListButton onClick={() => sortCurrentArticles('date-asc')} white={true}>
                 ASC
               </ArticlesListButton>
-              <ArticlesListButton onClick={() => sortArticles('date-desc')} white={true}>
+              <ArticlesListButton onClick={() => sortCurrentArticles('date-desc')} white={true}>
                 DESC
               </ArticlesListButton>
             </div>

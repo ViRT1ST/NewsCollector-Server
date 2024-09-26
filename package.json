@@ -14,7 +14,7 @@
     "@vercel/postgres": "^0.9.0",
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",
-    "next": "14.2.7",
+    "next": "^14.2.13",
     "pg": "^8.11.5",
     "react": "^18",
     "react-dom": "^18",

@@ -186,7 +186,7 @@ const twSubmitButton = classesBeautify(`
   text-lg font-roboto uppercase leading-4 border rounded 
   bg-lt-btn-default-bg/30 dark:bg-dt-btn-default-bg/[0.03]
   text-lt-btn-default-fg dark:text-dt-btn-default-fg
-  border-lt-btn-default-bg/30 dark:border-dt-btn-default-bg/30
+  border-lt-btn-default-bg/30 dark:border-dt-btn-default-bg/10
   hover:text-lt-btn-safe-fg hover:dark:text-dt-btn-safe-fg
   hover:bg-lt-btn-safe-bg hover:dark:bg-dt-btn-safe-bg
   hover:border-lt-btn-safe-bg hover:dark:border-dt-btn-safe-bg

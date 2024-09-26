@@ -250,4 +250,84 @@ export const defaultArticles = [
     unreaded_by: '{75fdeead-bc7f-455f-82df-da45d39dcd7a}',
     created_at: '2024-09-07 13:42:55.9962+05'
   },
+  {
+    uuid: 'c56ff6cd-d54b-4e65-a28d-1b01637a789b',
+    site: 'Kwork',
+    section: 'Разработка и IT',
+    title: 'React frontend верстка',
+    url: 'https://kwork.ru/projects/2579008',
+    source_uuid: '55a2c33e-dd00-463f-aaaf-911036993274',
+    unreaded_by: '{75fdeead-bc7f-455f-82df-da45d39dcd7a}',
+    created_at: '2024-09-15 12:26:53.772631+05'
+  },
+  {
+    uuid: '6847b76d-df3a-4858-a20e-217fc1a47258',
+    site: 'Kwork',
+    section: 'Разработка и IT',
+    title: 'Платформа для марафонов по ЗОЖ на Next, Nest, React',
+    url: 'https://kwork.ru/projects/2578964',
+    source_uuid: '55a2c33e-dd00-463f-aaaf-911036993274',
+    unreaded_by: '{75fdeead-bc7f-455f-82df-da45d39dcd7a}',
+    created_at: '2024-09-15 12:26:53.772631+05'
+  },
+  {
+    uuid: '0372ab58-40e3-4767-9463-2bb07615fa0d',
+    site: 'Kwork',
+    section: 'Разработка и IT',
+    title: 'Разработка на Next.js',
+    url: 'https://kwork.ru/projects/2585376',
+    source_uuid: '55a2c33e-dd00-463f-aaaf-911036993274',
+    unreaded_by: '{75fdeead-bc7f-455f-82df-da45d39dcd7a}',
+    created_at: '2024-09-20 22:00:49.708789+05'
+  },
+  {
+    uuid: '1a9972ba-adc7-4866-8a4e-b4dbc77e58e5',
+    site: 'Kwork',
+    section: 'Разработка и IT',
+    title: 'Frontend разработка на React',
+    url: 'https://kwork.ru/projects/2580501',
+    source_uuid: '55a2c33e-dd00-463f-aaaf-911036993274',
+    unreaded_by: '{75fdeead-bc7f-455f-82df-da45d39dcd7a}',
+    created_at: '2024-09-17 00:12:58.510677+05'
+  },
+  {
+    uuid: 'c04b2b05-ac4c-4009-9d2b-18a710094104',
+    site: 'Kwork',
+    section: 'Разработка и IT',
+    title: 'Доработка сайта на next.js + sanity',
+    url: 'https://kwork.ru/projects/2581873',
+    source_uuid: '55a2c33e-dd00-463f-aaaf-911036993274',
+    unreaded_by: '{75fdeead-bc7f-455f-82df-da45d39dcd7a}',
+    created_at: '2024-09-17 20:11:35.77345+05'
+  },
+  {
+    uuid: 'a14d3e83-4d82-4243-83e2-f570cdf13c9f',
+    site: 'Kwork',
+    section: 'Разработка и IT',
+    title: 'Нужен разработчик на Electron Js',
+    url: 'https://kwork.ru/projects/2584912',
+    source_uuid: '55a2c33e-dd00-463f-aaaf-911036993274',
+    unreaded_by: '{75fdeead-bc7f-455f-82df-da45d39dcd7a}',
+    created_at: '2024-09-20 15:00:48.704211+05'
+  },
+  {
+    uuid: '721fa262-a3d6-4dfc-91f8-3eab220e9bfb',
+    site: 'Kwork',
+    section: 'Разработка и IT',
+    title: 'Исправление ошибок скрипта JavaScript/Node.js',
+    url: 'https://kwork.ru/projects/2587682',
+    source_uuid: '55a2c33e-dd00-463f-aaaf-911036993274',
+    unreaded_by: '{75fdeead-bc7f-455f-82df-da45d39dcd7a}',
+    created_at: '2024-09-23 18:36:07.490055+05'
+  },
+  {
+    uuid: '369fe4df-3474-407d-8b8e-369a8f8ce47d',
+    site: 'Kwork',
+    section: 'Разработка и IT',
+    title: 'Нужен фронтендер не студент, проект на react дописать',
+    url: 'https://kwork.ru/projects/2587866',
+    source_uuid: '55a2c33e-dd00-463f-aaaf-911036993274',
+    unreaded_by: '{75fdeead-bc7f-455f-82df-da45d39dcd7a}',
+    created_at: '2024-09-23 21:01:06.827279+05'
+  },
 ];

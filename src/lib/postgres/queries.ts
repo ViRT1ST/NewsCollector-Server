@@ -251,11 +251,20 @@ async function insertArticles(array: ArticleFromSpider[]) {
         SELECT uuid
         FROM nc_users
         WHERE source_uuid = ANY(subscriptions)
+        AND NOT EXISTS (
+            SELECT 1
+            FROM unnest(keywords_black) AS keyword
+            WHERE lower(title) LIKE '%' || lower(keyword) || '%'
+        )
+        AND NOT EXISTS (
+            SELECT 1
+            FROM unnest(keywords_black) AS keyword
+            WHERE lower(url) LIKE '%' || lower(keyword) || '%'
+        )
       )
     ) AS unreaded_by
     FROM json_populate_recordset(NULL::nc_articles, $1);
   `;
-
   await executeQuery(query, [JSON.stringify(array)]);
 }
 
