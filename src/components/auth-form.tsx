@@ -69,7 +69,6 @@ export default function AuthForm() {
         password: passwordRef.current.value
       };
   
-      // await?
       authUser(userInputData);
     }
   };

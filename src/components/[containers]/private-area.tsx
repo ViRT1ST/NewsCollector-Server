@@ -9,7 +9,7 @@ import { getCookies } from '@/utils/cookies';
 
 type Props = React.ComponentProps<'div'>;
 
-export default function PrivateArea( { children }: Props) {
+export default function PrivateArea({ children }: Props) {
   const dispatch = useDispatch();
   const router = useRouter();
 

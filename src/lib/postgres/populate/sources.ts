@@ -91,7 +91,7 @@ export const defaultSources = [
     uuid: 'c5307643-975c-400f-aa0c-4505433bde63',
     site: 'Хабр',
     section: 'HTML',
-    url: 'ttps://habr.com/ru/rss/hubs/html5/articles/all/?fl=ru',
+    url: 'https://habr.com/ru/rss/hubs/html5/articles/all/?fl=ru',
     parsing_method: 'rss',
     regex: '^.*?habr.com/ru/.*?/\\d{6}/.*$',
     remove_in_title: '/ Хабр',
