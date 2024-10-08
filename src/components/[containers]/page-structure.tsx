@@ -4,7 +4,7 @@ import Footer from '@/components/[common-ui]/footer';
 import Theme from '@/components/[containers]/theme';
 import PrivateArea from '@/components/[containers]/private-area';
 
-type Props = React.ComponentProps<'div'>;
+type Props = React.ComponentPropsWithoutRef<'div'>;
 
 export default function PageStructure({ children }: Props) {
   return (

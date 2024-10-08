@@ -70,9 +70,7 @@ export type CatchAllSlug = {
   }
 };
 
-export type ObjectWithAnyData = {
-  [key: string]: any;
-};
+export type ObjectWithAnyData = Record<string, any>;
 
 /* =============================================================
 Other
@@ -117,15 +115,6 @@ export type ArticleAtClient = {
   title: string;
   url: string;
   created_at: string;
-};
-
-export type ArticleAtClientWithDateObject = {
-  uuid: string;
-  site: string;
-  section: string;
-  title: string;
-  url: string;
-  created_at: Date;
 };
 
 export type SourceAtClient = {

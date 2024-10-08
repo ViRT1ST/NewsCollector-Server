@@ -10,22 +10,22 @@ import { usersApi } from '@/lib/redux/apis';
 import { setCookies } from '@/utils/cookies';
 import { classesBeautify } from '@/utils/styles';
 
-const authConfig: any = {
-  login: {
-    formTitle: 'Login',
-    buttonText: 'Login',
-    swichingLink: '/page/auth',
-    swichingText: 'Register',
-    apiHook: usersApi.useLoginUserMutation,
-  },
-  register: {
-    formTitle: 'Registration',
-    buttonText: 'Register',
-    swichingLink: '/page/auth',
-    swichingText: 'Log In',
-    apiHook: usersApi.useCreateUserMutation,
-  }
-};
+const loginPageConfig = {
+  formTitle: 'Login',
+  buttonText: 'Login',
+  swichingLink: '/page/auth',
+  swichingText: 'Register',
+  apiHook: usersApi.useLoginUserMutation,
+} as const;
+
+const registerPageConfig = {
+  formTitle: 'Registration',
+  buttonText: 'Register',
+  swichingLink: '/page/auth',
+  swichingText: 'Log In',
+  apiHook: usersApi.useCreateUserMutation,
+} as const;
+
 
 export default function AuthForm() {
   const dispatch = useDispatch();
@@ -33,16 +33,23 @@ export default function AuthForm() {
 
   const [ pageType, setPageType ] = useState('login');
 
+  const currentPageConfig = pageType === 'login' ? loginPageConfig : registerPageConfig;
+
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
-  const [ authUser, authResults ] = authConfig[pageType].apiHook();
+  const [ authUser, authResults ] = currentPageConfig.apiHook();
 
-  const errorMessage = authResults.error?.data?.message;
-
+  let errorMessage;
+  if (authResults.status === 'rejected') {
+    const error = authResults.error as any;
+    errorMessage = error?.data?.message;
+  }
+  
   useEffect(() => {
-    if (authResults.data?.data) {
-      const { token, user } = authResults.data.data;
+    if (authResults.status === 'fulfilled') {
+      const authData = authResults.data as any;
+      const { token, user } = authData.data;
       const { uuid, email } = user;
 
       const userData = { uuid, email, token };
@@ -51,7 +58,7 @@ export default function AuthForm() {
 
       router.push('/page/articles/unreaded');
     }
-  }, [authResults.data?.data?.token]);
+  }, [authResults]);
 
   const switchPageType = () => {
     setPageType(pageType === 'login' ? 'register' : 'login');
@@ -78,7 +85,7 @@ export default function AuthForm() {
       <div className={twContentContainer}>
 
         <form className={twForm} onSubmit={onFormSubmit}>
-          <h1 className={twTitle}>{authConfig[pageType].formTitle}</h1>
+          <h1 className={twTitle}>{currentPageConfig.formTitle}</h1>
           
           <label className={twLabel} htmlFor="email">Email</label>
           <input
@@ -106,14 +113,14 @@ export default function AuthForm() {
 
           <div className={twButtonsArea}>
             <button className={twButton} type="submit">
-              {authConfig[pageType].buttonText}
+              {currentPageConfig.buttonText}
             </button>
           </div>
         </form>
 
         <div className={twLinksArea}>
           <Link className={twLinksAreaItem} href="" onClick={switchPageType}>
-            {authConfig[pageType].swichingText}
+            {currentPageConfig.swichingText}
           </Link>
           {' | '}
           <Link className={twLinksAreaItem} href="">

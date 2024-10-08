@@ -1,6 +1,6 @@
 import { twMerge } from 'tailwind-merge';
 
-type Props = React.ComponentProps<'button'> & {
+type Props = React.ComponentPropsWithoutRef<'button'> & {
   danger?: boolean;
   white?: boolean;
 };

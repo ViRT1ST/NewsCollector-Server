@@ -1,58 +1,32 @@
-import { ArticleAtClient, ArticleAtClientWithDateObject } from '@/types';
-
-/* =============================================================
-Sorting
-============================================================= */
-
-type Direction = 'asc' | 'desc'
-
-function sortArticlesByTitle(articles: ArticleAtClient[]) {
-  articles.sort((a, b) => a.title.localeCompare(b.title));
-}
-
-function sortArticlesByDate(articles: ArticleAtClient[], direction: Direction) {
-  articles.sort((a, b) => {
-    if (direction === 'asc') {
-      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-    } else {
-      return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
-    }
-  });
-}
-
-function sortArticlesBySite(articles: ArticleAtClient[], direction: Direction) {
-  articles.sort((a, b) => {
-    if (direction === 'asc') {
-      return a.site.localeCompare(b.site);
-    } else {
-      return b.site.localeCompare(a.site);
-    }
-  });
-}
+import { ArticleAtClient } from '@/types';
 
 export function sortArticles(articles: ArticleAtClient[], sorting: string | null) {
-  if (articles.length !== 0) {
-    const newArticles = [...articles];
-    
-    sortArticlesByTitle(newArticles);
+  const newArticles = [...articles];
+  
+  // first sort articles by title
+  newArticles.sort((a, b) => a.title.localeCompare(b.title));
 
+  // then sort articles by date or site
+  newArticles.sort((a, b) => {
     if (sorting === 'date-asc') {
-      sortArticlesByDate(newArticles, 'asc');
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+
     } else if (sorting === 'date-desc') {
-      sortArticlesByDate(newArticles, 'desc');
+      return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+
     } else if (sorting === 'site-asc') {
-      sortArticlesBySite(newArticles, 'asc');
+      return a.site.localeCompare(b.site);
+
     } else if (sorting === 'site-desc') {
-      sortArticlesBySite(newArticles, 'desc');
-    } 
+      return b.site.localeCompare(a.site);
 
-    return newArticles;
-  }
+    } else {
+      return 0;
+    }
+  });
+
+  return newArticles;
 }
-
-/* =============================================================
-Other
-============================================================= */
 
 export function convertDateToAgo(time: Date | string) {
   const date = new Date(time);

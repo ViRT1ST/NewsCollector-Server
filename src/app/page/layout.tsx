@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { store } from '@/lib/redux/store';
 
 type Props = {
-  children: React.ReactNode;
+  children: JSX.Element;
 };
 
 export default function ContentLayout({ children }: Props) {

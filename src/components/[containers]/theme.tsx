@@ -3,7 +3,7 @@
 import { restorePageThemeFromStorage } from '@/utils/themes';
 import { classesBeautify } from '@/utils/styles';
 
-type Props = React.ComponentProps<'div'>;
+type Props = React.ComponentPropsWithoutRef<'div'>;
 
 export default function Theme({ children }: Props) {
   restorePageThemeFromStorage();
