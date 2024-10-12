@@ -1,7 +1,7 @@
 import { successResponse, errorResponse } from '@/utils/api';
 import { convertZodErrorsToMsgArray } from '@/utils/zod';
-import { ERRORS, ExtendedError } from '@/utils/errors';
-import { authForm, AuthFormSchema } from '@/types';
+import { ERRORS, FetchError } from '@/utils/errors';
+import { AuthForm, AuthFormSchema } from '@/types';
 import pg from '@/lib/postgres/queries';
 
 export const dynamic = 'force-dynamic';
@@ -15,13 +15,13 @@ Body         : { email, password }
 
 export const POST = async (req: Request) => {
   try {
-    const body: authForm = await req.json();
+    const body: AuthForm = await req.json();
 
     const result = AuthFormSchema.safeParse(body);
 
     if (!result.success) {
       const errorMessages = convertZodErrorsToMsgArray(result);
-      throw new ExtendedError(400, errorMessages.join(' | '));
+      throw new FetchError(400, errorMessages.join(' | '));
     }
 
     const { email, password } = result.data;
@@ -29,7 +29,7 @@ export const POST = async (req: Request) => {
     const existingUser = await pg.getUserByEmail(email);
     
     if (existingUser) {
-      throw new ExtendedError(...ERRORS.userAlreadyExists);
+      throw new FetchError(...ERRORS.userAlreadyExists);
     }
 
     const user = await pg.createUser(email, password);

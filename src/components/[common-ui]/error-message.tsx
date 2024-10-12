@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { classesBeautify } from '@/utils/styles';
 
 const redirectPath = '/page/auth';
-const initialSeconds = 9;
+const initialSeconds = 30;
 
 type Props = {
   code?: number,

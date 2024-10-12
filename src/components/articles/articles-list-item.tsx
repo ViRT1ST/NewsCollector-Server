@@ -5,8 +5,8 @@ import { twMerge } from 'tailwind-merge';
 import { useRef } from 'react';
 
 import { ArticleAtClient } from '@/types';
-import { articlesApi } from '@/lib/redux/apis';
 import { classesBeautify } from '@/utils/styles';
+import { useSaveArticle, useHideArticle } from '@/hooks/api';
 import { convertDateToAgo, hideElementWithCollapsing } from '@/utils/articles';
 import ArticlesListButton from '@/components/articles/articles-list-button';
 
@@ -19,12 +19,12 @@ type Props = {
 export default function ArticleItem({ article, page, onRemoveFromList }: Props) {
   const { uuid, site, section, title, url, created_at } = article;
 
+  const { mutate: saveArticleFn } = useSaveArticle();
+  const { mutate: hideArticleFn } = useHideArticle();
+
   const isSavedPage = page === 'saved';
 
   const containerRef = useRef<HTMLDivElement>(null);
-
-  const [ saveArticle ] = articlesApi.useSaveArticleMutation();
-  const [ deleteArticle ] = articlesApi.useDeleteArticleMutation();
 
   async function removeFromList(uuid: string) {
     await hideElementWithCollapsing(containerRef);
@@ -33,12 +33,12 @@ export default function ArticleItem({ article, page, onRemoveFromList }: Props) 
 
   async function handleDeleteClick() {
     await removeFromList(uuid);
-    deleteArticle(uuid);
+    hideArticleFn(uuid);
   };
 
-  const handleSaveClick = async () => {
+  async function handleSaveClick() {
     await removeFromList(uuid);
-    saveArticle(uuid);
+    saveArticleFn(uuid);
   };
 
   return (

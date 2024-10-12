@@ -11,7 +11,6 @@ export default function Spinner() {
 
 const twContainer = classesBeautify(`
   w-full h-full pt-6 flex flex-col justify-start items-center
-  bg-lt-page-bg dark:bg-dt-page-bg
 `);
 
 const twIcon = classesBeautify(`

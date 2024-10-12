@@ -1,91 +1,76 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-import { accountActions } from '@/lib/redux/slices';
-import { usersApi } from '@/lib/redux/apis';
 import { setCookies } from '@/utils/cookies';
 import { classesBeautify } from '@/utils/styles';
+import { useGlobalStore } from '@/stores/global';
+import { useLoginUser, useCreateUser } from '@/hooks/api';
+import Spinner from './[common-ui]/spinner';
 
 const loginPageConfig = {
   formTitle: 'Login',
   buttonText: 'Login',
   swichingLink: '/page/auth',
   swichingText: 'Register',
-  apiHook: usersApi.useLoginUserMutation,
-} as const;
+  apiHook: useLoginUser,
+};
 
 const registerPageConfig = {
   formTitle: 'Registration',
   buttonText: 'Register',
   swichingLink: '/page/auth',
   swichingText: 'Log In',
-  apiHook: usersApi.useCreateUserMutation,
-} as const;
-
+  apiHook: useCreateUser,
+};
 
 export default function AuthForm() {
-  const dispatch = useDispatch();
   const router = useRouter();
 
   const [ pageType, setPageType ] = useState('login');
+  const [ errorMessage, setErrorMessage ] = useState('');
+  const [ email, setEmail ] = useState('');
+  const [ password, setPassword ] = useState('');
 
-  const currentPageConfig = pageType === 'login' ? loginPageConfig : registerPageConfig;
+  const pageConfig = pageType === 'login' ? loginPageConfig : registerPageConfig;
 
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-
-  const [ authUser, authResults ] = currentPageConfig.apiHook();
-
-  let errorMessage;
-  if (authResults.status === 'rejected') {
-    const error = authResults.error as any;
-    errorMessage = error?.data?.message;
-  }
+  const { mutate: authUser, data, isSuccess, isPending, error } = pageConfig.apiHook();
+  const updateUserState = useGlobalStore((state) => state.updateUserData);
   
   useEffect(() => {
-    if (authResults.status === 'fulfilled') {
-      const authData = authResults.data as any;
-      const { token, user } = authData.data;
+    if (isSuccess) {
+      const { token, user } = data.data;
       const { uuid, email } = user;
 
       const userData = { uuid, email, token };
-      dispatch(accountActions.updateData(userData));
+      updateUserState(userData);
       setCookies(userData);
 
       router.push('/page/articles/unreaded');
     }
-  }, [authResults]);
+  }, [isSuccess]);
 
-  const switchPageType = () => {
+  useEffect(() => {
+    setErrorMessage(error ? error.message : '');
+  }, [error]);
+
+  function switchPageType() {
     setPageType(pageType === 'login' ? 'register' : 'login');
-  };
+  }
  
-  const onFormSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+  function onFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
-    const isEmailInputExist = typeof emailRef?.current?.value === 'string';
-    const isPasswordInputExist = typeof passwordRef?.current?.value === 'string';
-
-    if (isEmailInputExist && isPasswordInputExist) {
-      const userInputData = {
-        email: emailRef.current.value,
-        password: passwordRef.current.value
-      };
-  
-      authUser(userInputData);
-    }
-  };
+    authUser({ email, password });
+  }
 
   return (
     <div className={twPageContainer}>
       <div className={twContentContainer}>
 
         <form className={twForm} onSubmit={onFormSubmit}>
-          <h1 className={twTitle}>{currentPageConfig.formTitle}</h1>
+          <h1 className={twTitle}>{pageConfig.formTitle}</h1>
           
           <label className={twLabel} htmlFor="email">Email</label>
           <input
@@ -96,7 +81,7 @@ export default function AuthForm() {
             placeholder="Email"
             autoComplete="on"
             required
-            ref={emailRef}
+            onChange={(e) => setEmail(e.target.value)}
           />
 
           <label className={twLabel} htmlFor="password">Password</label>
@@ -108,25 +93,27 @@ export default function AuthForm() {
             placeholder="Password"
             autoComplete="on"
             required
-            ref={passwordRef}
+            onChange={(e) => setPassword(e.target.value)}
           />
 
           <div className={twButtonsArea}>
             <button className={twButton} type="submit">
-              {currentPageConfig.buttonText}
+              {pageConfig.buttonText}
             </button>
           </div>
         </form>
 
         <div className={twLinksArea}>
           <Link className={twLinksAreaItem} href="" onClick={switchPageType}>
-            {currentPageConfig.swichingText}
+            {pageConfig.swichingText}
           </Link>
           {' | '}
           <Link className={twLinksAreaItem} href="">
             Restore Password
           </Link>
         </div>
+
+        {isPending && <Spinner />}
 
         {errorMessage && (
           <div className={twErrorContainer}>

@@ -1,7 +1,7 @@
 import { headers } from 'next/headers';
 
 import { successResponse, errorResponse } from '@/utils/api';
-import { ERRORS, ExtendedError } from '@/utils/errors';
+import { ERRORS, FetchError } from '@/utils/errors';
 import pg from '@/lib/postgres/queries';
 
 export const dynamic = 'force-dynamic';
@@ -19,11 +19,11 @@ export const GET = async () => {
     const user = await pg.getUserByToken(authToken);
 
     if (!user) {
-      throw new ExtendedError(...ERRORS.invalidToken);
+      throw new FetchError(...ERRORS.invalidToken);
     }
 
     if (!user.is_admin) {
-      throw new ExtendedError(...ERRORS.notAdmin);
+      throw new FetchError(...ERRORS.notAdmin);
     }
 
     const sources = await pg.getSourcesList();

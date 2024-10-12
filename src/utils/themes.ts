@@ -1,19 +1,19 @@
 const dark = 'dark';
 const light = 'light';
 
-function getHtmlElement() {
-  return document.getElementsByTagName('html')[0];
+function getBodyElement() {
+  return document.getElementsByTagName('body')[0];
 }
 
 function forceDarkTheme() {
-  getHtmlElement().classList.add(dark);
-  getHtmlElement().classList.remove(light);
+  getBodyElement().classList.add(dark);
+  getBodyElement().classList.remove(light);
   localStorage.theme = dark;
 }
 
 function forceLightTheme() {
-  getHtmlElement().classList.add(light);
-  getHtmlElement().classList.remove(dark);
+  getBodyElement().classList.add(light);
+  getBodyElement().classList.remove(dark);
   localStorage.theme = light;
 }
 
@@ -29,18 +29,18 @@ function restorePageThemeFromStorage() {
   }
 
   // important: must be space in join() method
-  const bodyClassList = getHtmlElement().classList;
-  const bodyClassName = Array.from(bodyClassList).join(' ');
-  const bodyTheme = bodyClassName.replace(/(?!(dark|light)\b)\b\w+\b|\s+/g, '');
+  const bodyElement = getBodyElement();
+  const bodyClassesString = Array.from(bodyElement.classList).join(' ');
+  const currentTheme = bodyClassesString.replace(/(?!(dark|light)\b)\b\w+\b|\s+/g, '');
 
-  if (bodyTheme) {
+  if (currentTheme) {
     return;
   }
 
   const storageTheme = localStorage.getItem('theme');
   
   if (storageTheme) {
-    getHtmlElement().classList.add(storageTheme);
+    bodyElement.classList.add(storageTheme);
   }
 }
 

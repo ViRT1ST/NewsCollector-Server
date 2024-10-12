@@ -1,7 +1,7 @@
 import { headers } from 'next/headers';
 
 import { successResponse, errorResponse } from '@/utils/api';
-import { ERRORS, ExtendedError } from '@/utils/errors';
+import { ERRORS, FetchError } from '@/utils/errors';
 import { CatchAllSlug } from '@/types';
 import pg from '@/lib/postgres/queries';
 
@@ -20,7 +20,7 @@ export const PATCH = async (req: Request, { params }: CatchAllSlug) => {
     const user = await pg.getUserByToken(authToken);
 
     if (!user) {
-      throw new ExtendedError(...ERRORS.invalidToken);
+      throw new FetchError(...ERRORS.invalidToken);
     }
 
     const [ articleUuid, articleAction ] = params.slug;

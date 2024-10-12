@@ -1,4 +1,5 @@
 import Cookies, { CookieSetOptions } from 'universal-cookie';
+import { type ObjectWithAnyData } from '@/types';
 
 const daysToExpiration = 89;
 
@@ -16,7 +17,7 @@ export function getCookies() {
   return new Cookies().getAll();
 }
 
-export function setCookies(obj: object) {
+export function setCookies(obj: ObjectWithAnyData) {
   const cookies = new Cookies();
 
   Object.entries(obj).forEach(([key, value]) => {

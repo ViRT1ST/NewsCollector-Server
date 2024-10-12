@@ -2,7 +2,7 @@ import { headers } from 'next/headers';
 import { NextRequest } from 'next/server';
 
 import { successResponse, errorResponse } from '@/utils/api';
-import { ERRORS, ExtendedError } from '@/utils/errors';
+import { ERRORS, FetchError } from '@/utils/errors';
 import jwt from '@/lib/jwt';
 import pg from '@/lib/postgres/queries';
 
@@ -21,7 +21,7 @@ export const POST = async (req: NextRequest) => {
     const user = await pg.getUserByToken(authToken);
 
     if (!user) {
-      throw new ExtendedError(...ERRORS.invalidToken);
+      throw new FetchError(...ERRORS.invalidToken);
     }
 
     const isNeedLogoutFromAllDevices = req.nextUrl.searchParams.get('all') === 'true';
@@ -38,7 +38,7 @@ export const POST = async (req: NextRequest) => {
 
     return successResponse(200, null);
 
-  } catch (error: any) {
+  } catch (error) {
     return errorResponse(error);
   }
 };

@@ -1,13 +1,17 @@
 'use client';
 
+import { useLayoutEffect } from 'react';
+
 import { restorePageThemeFromStorage } from '@/utils/themes';
 import { classesBeautify } from '@/utils/styles';
 
 type Props = React.ComponentPropsWithoutRef<'div'>;
 
 export default function Theme({ children }: Props) {
-  restorePageThemeFromStorage();
-
+  useLayoutEffect(() => {
+    restorePageThemeFromStorage();
+  }, []);
+  
   return (
     <div className={twContainer}>
       {children}

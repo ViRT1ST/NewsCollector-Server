@@ -1,20 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { ArticleAtClient } from '@/types';
-import { articlesApi } from '@/lib/redux/apis';
-import { formatQueryResults } from '@/utils/redux';
+import { type ArticleAtClient } from '@/types';
 import { classesBeautify } from '@/utils/styles';
-import { sortArticles } from '@/utils/articles';
 import { getCookies, setCookies } from '@/utils/cookies';
+import { sortArticles } from '@/utils/articles';
+import { useGetArticles } from '@/hooks/api';
+import { FetchError } from '@/utils/errors';
+import ArticlesControls from '@/components/articles/articles-controls';
 import ArticleItem from '@/components/articles/articles-list-item';
 import Spinner from '@/components/[common-ui]/spinner';
 import ErrorMessage from '@/components/[common-ui]/error-message';
-import ArticlesControls from '@/components/articles/articles-controls';
-
-export const dynamic = 'force-dynamic';
 
 type Props = {
   page: string;
@@ -22,44 +19,40 @@ type Props = {
 };
 
 export default function ArticlesList({ page, noArticlesMsg }: Props) {
-  const dispatch = useDispatch();
-
-  const { data: response, error, isFetching, refetch } = articlesApi.useFetchArticlesQuery(page);
-  const { success, code, data, message } = formatQueryResults(response, error);
+  const { data, isFetching, isSuccess, error, refetch } = useGetArticles(page);
 
   const [ articles, setArticles ] = useState<ArticleAtClient[]>([]);
+
   const [ mustRefreshOnZero, setMustRefreshOnZero ] = useState(true);
 
   useEffect(() => {
-    if (!isFetching) {
-      if (data && data.length !== 0) {
+    if (!isFetching && isSuccess) {
+      const fetchedArticles = data?.data || [];
+
+      if (fetchedArticles.length !== 0) {
         const sorting = getCookies()['articles-sorting'];
-        const sortedArticles = sortArticles(data, sorting);
+        const sortedArticles = sortArticles(fetchedArticles, sorting);
+
         setArticles(sortedArticles);
         setMustRefreshOnZero(true);
       } else {
         setArticles([]);
         setMustRefreshOnZero(false);
       }
-
-      return () => {
-        dispatch(articlesApi.util.resetApiState());
-      };
     }
-    
+  
   }, [isFetching]);
 
   useEffect(() => {
     if (articles.length === 0 && mustRefreshOnZero && !isFetching) {
-      refetchArticles();
+      refetchArticles(true);
     }
   }, [articles.length]);
 
-  function refetchArticles() {
+  function refetchArticles(withDelay: boolean = false) {
     setTimeout(() => {
-      setArticles([]);
       refetch();
-    }, 300);
+    }, withDelay ? 300 : 0);    
   }
 
   function handleSortingButtonClick(sorting: string | null, createCookie = true) {
@@ -80,14 +73,15 @@ export default function ArticlesList({ page, noArticlesMsg }: Props) {
         <Spinner />
       );
     }
-  
-    if (message) {
+
+    if (error) {
+      const { code, message } = error as FetchError;
       return (
         <ErrorMessage code={code} message={message} />
       );
     }
-  
-    if (articles.length === 0 && !mustRefreshOnZero) {
+
+    if (isSuccess && articles.length === 0 && !mustRefreshOnZero) {
       return (
         <p className={twNoNewsMessage}>
           {noArticlesMsg}
@@ -95,7 +89,7 @@ export default function ArticlesList({ page, noArticlesMsg }: Props) {
       );
     }
 
-    if (success && articles.length !== 0) {
+    if (isSuccess && articles.length !== 0) {
       return (
         <>
           <ArticlesControls
@@ -117,7 +111,7 @@ export default function ArticlesList({ page, noArticlesMsg }: Props) {
         </>
       ); 
     }
-    
+  
     return null;
   }
 

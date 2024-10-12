@@ -5,7 +5,7 @@ News Collector (Frontend/Backend Code)
 ## Использованные технологии
 - Язык: JavaScript/TypeScript
 - Фреймворк: Next.js 
-- Фронт: React, TailwindCSS, Redux Toolkit, RTK Query
+- Фронт: React, TailwindCSS, Zustand, React Query
 - Бэк: REST API, JWT, PostgreSQL
 
 Выложено для портфолио.

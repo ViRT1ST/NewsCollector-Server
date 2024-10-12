@@ -34,7 +34,7 @@ const rootLayoutClasses = [
 ];
 
 type Props = {
-  children: JSX.Element;
+  children: React.JSX.Element;
 };
 
 export default function RootLayout({ children } : Props) {

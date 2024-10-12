@@ -1,7 +1,7 @@
 import { headers } from 'next/headers';
 
 import { successResponse, errorResponse } from '@/utils/api';
-import { ERRORS, ExtendedError } from '@/utils/errors';
+import { ERRORS, FetchError } from '@/utils/errors';
 import { UpdateUserSchema, UpdateUser } from '@/types';
 import { convertZodErrorsToMsgArray } from '@/utils/zod';
 import pg from '@/lib/postgres/queries';
@@ -21,7 +21,7 @@ export const GET = async () => {
     const user = await pg.getUserByToken(authToken);
 
     if (!user) {
-      throw new ExtendedError(...ERRORS.invalidToken);
+      throw new FetchError(...ERRORS.invalidToken);
     }
 
     const { uuid, email, subscriptions } = user;
@@ -61,7 +61,7 @@ export const DELETE = async () => {
     const user = await pg.getUserByToken(authToken);
 
     if (!user) {
-      throw new ExtendedError(...ERRORS.invalidToken);
+      throw new FetchError(...ERRORS.invalidToken);
     }
 
     await pg.deleteUser(user.uuid);
@@ -86,7 +86,7 @@ export const PATCH = async (req: Request) => {
     const user = await pg.getUserByToken(authToken);
 
     if (!user) {
-      throw new ExtendedError(...ERRORS.invalidToken);
+      throw new FetchError(...ERRORS.invalidToken);
     }
 
     const body: Omit<UpdateUser, 'uuid'> = await req.json();
@@ -100,7 +100,7 @@ export const PATCH = async (req: Request) => {
 
     if (!result.success) {
       const errorMessages = convertZodErrorsToMsgArray(result);
-      throw new ExtendedError(400, errorMessages.join(' | '));
+      throw new FetchError(400, errorMessages.join(' | '));
     }
 
     const updateUserData: UpdateUser = {
@@ -117,7 +117,7 @@ export const PATCH = async (req: Request) => {
         const userWithSameEmail = await pg.getUserByEmail(new_email);
 
         if (userWithSameEmail) {
-          throw new ExtendedError(...ERRORS.notAllowedNewEmail);
+          throw new FetchError(...ERRORS.notAllowedNewEmail);
         } else {
           updateUserData.new_email = new_email;
         }

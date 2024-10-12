@@ -1,30 +1,35 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 
-import { usersApi } from '@/lib/redux/apis';
-import { accountActions } from '@/lib/redux/slices';
 import { removeCookies } from '@/utils/cookies';
-import EmptyScreen from '@/components/[common-ui]/empty-screen';
+import { useGlobalStore } from '@/stores/global';
+import { useLogoutUser } from '@/hooks/api';
+import PageStructure from '@/components/[containers]/page-structure';
+import Spinner from '@/components/[common-ui]/spinner';
 
 export default function LogoutPage() {
-  const dispatch = useDispatch();
   const router = useRouter();
 
-  const [ logoutUser ] = usersApi.useLogoutUserMutation();
+  const removeUserState = useGlobalStore((state) => state.removeUserData);
+  const { mutate: logoutUser, isSuccess } = useLogoutUser();
 
   useEffect(() => {
     logoutUser();
-
-    removeCookies(['uuid', 'email', 'token']);
-    dispatch(accountActions.removeData());
-
-    router.push('/page/auth');
   }, []);
-  
+
+  useEffect(() => {
+    if (isSuccess) {
+      removeCookies(['uuid', 'email', 'token']);
+      removeUserState();
+      router.push('/page/auth');
+    }
+  }, [isSuccess]);
+
   return (
-    <EmptyScreen />
+    <PageStructure>
+      <Spinner />
+    </PageStructure>
   );
 }

@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 
 import { successResponse, errorResponse } from '@/utils/api';
 import { convertZodErrorsToMsgArray } from '@/utils/zod';
-import { ERRORS, ExtendedError } from '@/utils/errors';
+import { ERRORS, FetchError } from '@/utils/errors';
 import { AuthFormSchema } from '@/types';
 import jwt from '@/lib/jwt';
 import pg from '@/lib/postgres/queries';
@@ -24,19 +24,19 @@ export const POST = async (req: Request) => {
 
     if (!result.success) {
       const errorMessages = convertZodErrorsToMsgArray(result);
-      throw new ExtendedError(400, errorMessages.join(' | '));
+      throw new FetchError(400, errorMessages.join(' | '));
     }
     
     const user = await pg.getUserByEmail(result.data.email);
 
     if (!user) {
-      throw new ExtendedError(...ERRORS.emailNotFound);
+      throw new FetchError(...ERRORS.emailNotFound);
     }
  
     const isPasswordMatches = bcrypt.compareSync(result.data.password, user.password);
 
     if (!isPasswordMatches) {
-      throw new ExtendedError(...ERRORS.invalidPassword);
+      throw new FetchError(...ERRORS.invalidPassword);
     }
 
     // all ok, logging in

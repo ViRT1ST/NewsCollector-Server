@@ -72,6 +72,27 @@ export type CatchAllSlug = {
 
 export type ObjectWithAnyData = Record<string, any>;
 
+
+/* =============================================================
+Global State
+============================================================= */
+
+export type GlobalStateUserData = {
+  uuid: string;
+  email: string;
+  token: string;
+};
+
+export type GlobalState = {
+  userData: {
+    uuid: string | null;
+    email: string | null;
+    token: string | null;
+  };
+  updateUserData: (userData: GlobalStateUserData) => void;
+  removeUserData: () => void;
+};
+
 /* =============================================================
 Other
 ============================================================= */
@@ -88,7 +109,7 @@ export const AuthFormSchema = z.object({
     .min(8, { message: ERRORS.zodBadPassword[1] })
 });
 
-export type authForm = z.infer<typeof AuthFormSchema>
+export type AuthForm = z.infer<typeof AuthFormSchema>
 
 export const ArticleFromSpiderSchema = z.object({
   url: z.string(),
@@ -138,11 +159,16 @@ export const UpdateUserSchema = z.object({
     .trim()
     .min(8, { message: ERRORS.zodBadPassword[1] })
   ),
-  new_subscriptions:asOptionalField(z
+  new_subscriptions: asOptionalField(z
     .array(z.string())
   )
 });
 
 export type UpdateUser = z.infer<typeof UpdateUserSchema>;
 
+export type UpdateUserBody = {
+  new_subscriptions: string[];
+  new_email?: string;
+  new_password?: string;
+};
 

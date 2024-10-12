@@ -3,7 +3,7 @@ import { NextRequest } from 'next/server';
 
 import { successResponse, errorResponse } from '@/utils/api';
 import { ArticleFromSpiderArraySchema, PositiveNumberSchema } from '@/types';
-import { ERRORS, ExtendedError } from '@/utils/errors';
+import { ERRORS, FetchError } from '@/utils/errors';
 
 import pg from '@/lib/postgres/queries';
 
@@ -22,7 +22,7 @@ export const GET = async (req: NextRequest) => {
     const user = await pg.getUserByToken(authToken);
 
     if (!user) {
-      throw new ExtendedError(...ERRORS.invalidToken);
+      throw new FetchError(...ERRORS.invalidToken);
     }
 
     const isSavedBy = req.nextUrl.searchParams.get('find') === 'saved';
@@ -48,11 +48,11 @@ export const POST = async (req: Request) => {
     const user = await pg.getUserByToken(authToken);
 
     if (!user) {
-      throw new ExtendedError(...ERRORS.invalidToken);
+      throw new FetchError(...ERRORS.invalidToken);
     }
 
     if (!user.is_admin) {
-      throw new ExtendedError(...ERRORS.notAdmin);
+      throw new FetchError(...ERRORS.notAdmin);
     }
 
     const articlesArray = await req.json();
@@ -60,7 +60,7 @@ export const POST = async (req: Request) => {
     const result = ArticleFromSpiderArraySchema.safeParse(articlesArray);
 
     if (!result.success) {
-      throw new ExtendedError(...ERRORS.invalidArticles);
+      throw new FetchError(...ERRORS.invalidArticles);
     }
 
     await pg.insertArticles(result.data);
@@ -85,14 +85,14 @@ export const DELETE = async (req: NextRequest) => {
     const user = await pg.getUserByToken(authToken);
 
     if (!user) {
-      throw new ExtendedError(...ERRORS.invalidToken);
+      throw new FetchError(...ERRORS.invalidToken);
     }
 
     const months = req.nextUrl.searchParams.get('months');
     const result = PositiveNumberSchema.safeParse(months);
 
     if (!result.success) {
-      throw new ExtendedError(...ERRORS.invalidParam);
+      throw new FetchError(...ERRORS.invalidParam);
     }
 
     const count = await pg.deleteOldArticles(result.data);

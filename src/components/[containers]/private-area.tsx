@@ -1,39 +1,39 @@
 'use client';
 
-import { useSelector, useDispatch } from 'react-redux';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { accountActions } from '@/lib/redux/slices';
+import { useGlobalStore } from '@/stores/global';
 import { getCookies } from '@/utils/cookies';
 
 type Props = React.ComponentPropsWithoutRef<'div'>;
 
 export default function PrivateArea({ children }: Props) {
-  const dispatch = useDispatch();
   const router = useRouter();
 
-  const jwt = useSelector((state: any) => state.account.token);
-  const cookies = getCookies();
+  const stateToken = useGlobalStore((state) => state.userData.token);
+  const updateUserData = useGlobalStore((state) => state.updateUserData);
 
-  const [ currentToken, setCurrentToken ] = useState<string | null>(jwt);
+  const { uuid: cookieUuid, email: cookieEmail, token: cookieToken } = getCookies();
 
-  if (!currentToken && cookies?.token) {
-    dispatch(accountActions.updateData({
-      id: cookies?.id,
-      email: cookies?.email,
-      token: cookies?.token
-    }));
-
-    setCurrentToken(cookies.token);
+  if (!stateToken && cookieUuid && cookieEmail && cookieToken) {
+    updateUserData({
+      uuid: cookieUuid, 
+      email: cookieEmail,
+      token: cookieToken
+    });
   }
 
   useEffect(() => {
-    if (!currentToken) {
+    if (!stateToken && !cookieToken) {
       router.push('/page/auth');
     }
-  }, [currentToken]);
+  }, [stateToken, cookieToken]);
 
-  return currentToken ? children : null;
+  if (stateToken) {
+    return children;
+  } else {
+    return null;
+  }
 }
 

@@ -1,159 +1,152 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
-import { SourceAtClient, UpdateUser } from '@/types';
-import { usersApi } from '@/lib/redux/apis';
-import { formatQueryResults } from '@/utils/redux';
+import { type SourceAtClient, type UpdateUserBody } from '@/types';
+import { useGetProfile, useUpdateProfile } from '@/hooks/api';
+import { FetchError } from '@/utils/errors';
 import { classesBeautify } from '@/utils/styles';
 import Spinner from '@/components/[common-ui]/spinner';
 import ErrorMessage from '@/components/[common-ui]/error-message';
 import Checkbox from '@/components/[common-ui]/checkbox';
 
 export default function Profile() {
-  const { data: response, error, isFetching, refetch } = usersApi.useGetProfileQuery();
-  const [ updateUser, updateResults ] = usersApi.useUpdateUserMutation();
-
-  const { success, code, data, message } = formatQueryResults(response, error);
+  const {
+    data: profileData,
+    isFetching: isProfileFetching,
+    isSuccess: isProfileFetchSuccess,
+    error: profileFetchError,
+    refetch: getProfileRefetch
+  } = useGetProfile();
+  
+  const {
+    mutate: updateProfile,
+    isSuccess: isProfileUpdateSuccess,
+    error: profileUpdateError,
+  } = useUpdateProfile();
 
   const [ sources, setSources ] = useState<SourceAtClient[]>([]);
-  const [ updateIsSuccessful, setUpdateIsSuccessful ] = useState(false);
-  const [ updateErrorMessage, setUpdateErrorMessage ] = useState<string>('');
-  
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-  
-  useEffect(() => {
-    if (!isFetching && data && data.length !== 0) {
-      setSources(data.sources);
-    }
-  }, [isFetching]);
+  const [ email, setEmail ] = useState('');
+  const [ password, setPassword ] = useState('');
 
   useEffect(() => {
-    if (updateResults.status === 'fulfilled') {
-      refetch();
-      setUpdateIsSuccessful(true);
+    if (!isProfileFetching && isProfileFetchSuccess) {
+      setSources(profileData?.data?.sources || []);
     }
+  }, [isProfileFetching, isProfileFetchSuccess]);
 
-    if (updateResults.status === 'rejected') {
-      const error = updateResults.error as any;
-      const message = error?.data?.message;
-      
-      if (typeof message === 'string') {
-        refetch();
-        setUpdateErrorMessage(message);
-      }
-    } 
-  }, [updateResults.status]);
+  useEffect(() => {
+    setSources([]);
+    getProfileRefetch();
+  }, [isProfileUpdateSuccess, profileUpdateError]);
 
   function handleCheckboxClick(e: React.ChangeEvent<HTMLInputElement>) {
-    const newSources = sources.map((item) => {
-      return item.uuid === e.target.name
-        ? { ...item, is_user_subscribed: e.target.checked }
-        : item;
-    });
-
-    setSources(newSources);
+    setSources((prev) => (
+      prev.map((item) => {
+        return item.uuid === e.target.name
+          ? { ...item, is_user_subscribed: e.target.checked }
+          : item;
+      })
+    ));
   }
 
   function handleFormSubmit(e: React.ChangeEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    setUpdateIsSuccessful(false);
+    const updateUserData: UpdateUserBody = {
+      new_subscriptions: sources
+        .filter((item) => item.is_user_subscribed)
+        .map((item) => item.uuid)
+    };
 
-    const updateUserData: Omit<UpdateUser, 'uuid'> = {};
-
-    updateUserData.new_subscriptions = sources
-      .filter((item) => item.is_user_subscribed)
-      .map((item) => item.uuid);
-    
-    const email = emailRef?.current?.value;
-    if (typeof email === 'string') {
+    if (email) {
       updateUserData.new_email = email.trim();
     }
 
-    const password = passwordRef?.current?.value;
-    if (typeof password === 'string') {
+    if (password) {
       updateUserData.new_password = password.trim();
     }
 
-    updateUser(updateUserData);
+    updateProfile(updateUserData);
   }
 
-  if (isFetching) {
+  if (isProfileFetching) {
     return <Spinner />;
   }
 
-  if (message) {
-    return <ErrorMessage code={code} message={message} />;
+  if (profileFetchError) {
+    const { code, message } = profileFetchError as FetchError;
+    return (
+      <ErrorMessage code={code} message={message} />
+    );
   }
 
-  if (success && sources.length === 0) {
-    return null;
+  if (isProfileFetchSuccess && sources.length !== 0) {
+    return (
+      <form className={twForm} onSubmit={handleFormSubmit}>
+  
+        <h1 className={twSectionTitle}>Change subscriptions</h1>
+        <div className={twSectionContent}>
+          <ul>
+            {sources.map(({ uuid, site, section, is_user_subscribed }) => (
+              <li key={uuid}>
+                <Checkbox 
+                  uuid={uuid}
+                  name={uuid}
+                  isChecked={is_user_subscribed}
+                  onCheckboxClick={handleCheckboxClick}
+                >
+                  {site} &middot; {section}
+                </Checkbox>
+              </li>
+            ))}
+          </ul>
+        </div>
+  
+        <h1 className={twSectionTitle}>Change email</h1>
+        <div className={twSectionContent}>
+          <input
+            className={twInputField}
+            placeholder="Email (valid email)"
+            type="text"
+            name="email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <span className={twInputNotation}>
+            Leave it empty if you don&apos;t need to change your email
+          </span>
+        </div>
+  
+        <h1 className={twSectionTitle}>Change password</h1>
+        <div className={twSectionContent}>
+          <input
+            className={twInputField}
+            placeholder="Password (at least 8 characters)"
+            type="password"
+            name="password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <span className={twInputNotation}>
+            Leave it empty if you don&apos;t need to change your password
+          </span>
+        </div>
+  
+        <button className={twSubmitButton} type="submit">
+          Save changes
+        </button>
+  
+        {isProfileUpdateSuccess && (
+          <span className={twUpdateMessage}>Your settings was updated!</span>
+        )}
+  
+        {profileUpdateError && (
+          <span className={twUpdateMessage}>ERROR: {profileUpdateError.message}</span>
+        )}
+      </form>
+    );
   }
 
-  return (
-    <form className={twForm} onSubmit={handleFormSubmit}>
-
-      <h1 className={twSectionTitle}>Change subscriptions</h1>
-      <div className={twSectionContent}>
-        <ul>
-          {sources.map(({ uuid, site, section, is_user_subscribed }) => (
-            <li key={uuid}>
-              <Checkbox 
-                uuid={uuid}
-                name={uuid}
-                isChecked={is_user_subscribed}
-                onCheckboxClick={handleCheckboxClick}
-              >
-                {site} &middot; {section}
-              </Checkbox>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <h1 className={twSectionTitle}>Change email</h1>
-      <div className={twSectionContent}>
-        <input
-          className={twInputField}
-          placeholder="Email (valid email)"
-          type="text"
-          name="email"
-          ref={emailRef}
-        />
-        <span className={twInputNotation}>
-          Leave it empty if you don&apos;t need to change your email
-        </span>
-      </div>
-
-      <h1 className={twSectionTitle}>Change password</h1>
-      <div className={twSectionContent}>
-        <input
-          className={twInputField}
-          placeholder="Password (at least 8 characters)"
-          type="password"
-          name="password"
-          ref={passwordRef}
-        />
-        <span className={twInputNotation}>
-          Leave it empty if you don&apos;t need to change your password
-        </span>
-      </div>
-
-      <button className={twSubmitButton} type="submit">
-        Save changes
-      </button>
-
-      {updateIsSuccessful && (
-        <span className={twUpdateMessage}>Your settings was updated!</span>
-      )}
-
-      {updateErrorMessage && (
-        <span className={twUpdateMessage}>ERROR: {updateErrorMessage}</span>
-      )}
-    </form>
-  );
+  return null;
 }
 
 const twForm = classesBeautify(`

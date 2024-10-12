@@ -1,28 +1,17 @@
 'use client';
 
-import { Provider } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import { store } from '@/lib/redux/store';
+const queryClient = new QueryClient();
 
 type Props = {
-  children: JSX.Element;
+  children: React.ReactNode;
 };
 
 export default function ContentLayout({ children }: Props) {
-  const [ isMounted, setIsMounted ] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) {
-    return null;
-  }
-
   return (
-    <Provider store={store}>
+    <QueryClientProvider client={queryClient}>
       {children}
-    </Provider>
+    </QueryClientProvider>
   );
 }

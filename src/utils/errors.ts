@@ -1,7 +1,7 @@
-export class ExtendedError extends Error {
-  public code: number | string;
+export class FetchError extends Error {
+  public code: number;
 
-  constructor(code: number | string, message: string) {
+  constructor(code: number, message: string) {
     super(message);
     this.name = this.constructor.name;
     this.code = code;
