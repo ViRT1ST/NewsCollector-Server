@@ -72,7 +72,6 @@ export type CatchAllSlug = {
 
 export type ObjectWithAnyData = Record<string, any>;
 
-
 /* =============================================================
 Global State
 ============================================================= */

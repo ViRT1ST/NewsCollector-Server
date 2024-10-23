@@ -16,7 +16,7 @@ export default function Profile() {
     isFetching: isProfileFetching,
     isSuccess: isProfileFetchSuccess,
     error: profileFetchError,
-    refetch: getProfileRefetch
+    refetch: profileRefetch
   } = useGetProfile();
   
   const {
@@ -33,12 +33,14 @@ export default function Profile() {
     if (!isProfileFetching && isProfileFetchSuccess) {
       setSources(profileData?.data?.sources || []);
     }
-  }, [isProfileFetching, isProfileFetchSuccess]);
+  }, [isProfileFetching, isProfileFetchSuccess, profileData]);
 
   useEffect(() => {
-    setSources([]);
-    getProfileRefetch();
-  }, [isProfileUpdateSuccess, profileUpdateError]);
+    if (isProfileUpdateSuccess && !profileUpdateError) {
+      setSources([]);
+      profileRefetch();
+    }
+  }, [isProfileUpdateSuccess, profileUpdateError, profileRefetch]);
 
   function handleCheckboxClick(e: React.ChangeEvent<HTMLInputElement>) {
     setSources((prev) => (

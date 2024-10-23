@@ -5,7 +5,6 @@ import { ROOT_PATH } from '@/config/public';
 import { FetchError } from '@/utils/errors';
 import { getCookies } from '@/utils/cookies';
 
-
 const apiBaseUrl = `${ROOT_PATH}/api`;
 
 /* =============================================================
@@ -28,24 +27,32 @@ function buildQueryOptions(method: string, body?: any) {
   return options;
 }
 
+function createErrorPromise(error: any) {
+  if (error instanceof FetchError) {
+    return Promise.reject(error);
+  }
+
+  if (error instanceof Error) {
+    return Promise.reject(new FetchError(400, error.message));
+  }
+
+  return Promise.reject(new FetchError(500, 'Unknown server error'));
+}
+
 async function doFetch(url: string, options: RequestInit) {
   try {
     const response = await fetch(url, options);
-    const data = await response.json();
-    const { success, message, code } = data;
+    const responseObject = await response.json();
+    const { success, code, message } = responseObject;
 
     if (!success && message && code) {
       throw new FetchError(code, message);
     }
 
-    if (!response.ok) {
-      throw new FetchError(500, 'Failed to fetch data from API');
-    }
-    
-    return data;
+    return responseObject;
 
   } catch (error) {
-    return Promise.reject(error);
+    return createErrorPromise(error);
   }
 }
 
@@ -125,7 +132,7 @@ export function useGetProfile() {
       const url = `${apiBaseUrl}/users/me`;
       const options = buildQueryOptions('GET');
       return doFetch(url, options);
-    }
+    },
   });
 }
 

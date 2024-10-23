@@ -27,7 +27,7 @@ export default function ErrorMessage({ code = 400, message = 'Unknown error' }: 
     }, 1000);
   
     return () => clearInterval(timer);
-  }, [seconds]);
+  }, [seconds, router]);
 
   return (
     <div className={twContainer}>

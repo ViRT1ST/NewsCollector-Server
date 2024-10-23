@@ -41,19 +41,19 @@ export default function ArticlesList({ page, noArticlesMsg }: Props) {
       }
     }
   
-  }, [isFetching]);
+  }, [isFetching, isSuccess, data]);
 
+  // automatic one-time refetching on zero articles 
   useEffect(() => {
-    if (articles.length === 0 && mustRefreshOnZero && !isFetching) {
-      refetchArticles(true);
-    }
-  }, [articles.length]);
+    const timer = setTimeout(() => {
+      if (mustRefreshOnZero && !isFetching && articles.length === 0) {
+        refetch();
+      }
+    }, 300);
 
-  function refetchArticles(withDelay: boolean = false) {
-    setTimeout(() => {
-      refetch();
-    }, withDelay ? 300 : 0);    
-  }
+    return () => clearTimeout(timer);
+  }, [articles.length, mustRefreshOnZero, isFetching, refetch]);
+
 
   function handleSortingButtonClick(sorting: string | null, createCookie = true) {
     if (articles.length !== 0) {
@@ -94,7 +94,7 @@ export default function ArticlesList({ page, noArticlesMsg }: Props) {
         <>
           <ArticlesControls
             quantity={articles.length}
-            refetch={refetchArticles}
+            refetch={refetch}
             sort={handleSortingButtonClick}
           />
           <ul>

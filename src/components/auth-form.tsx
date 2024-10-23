@@ -50,7 +50,7 @@ export default function AuthForm() {
 
       router.push('/page/articles/unreaded');
     }
-  }, [isSuccess]);
+  }, [isSuccess, data, updateUserState, router]);
 
   useEffect(() => {
     setErrorMessage(error ? error.message : '');

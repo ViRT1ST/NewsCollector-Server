@@ -9,7 +9,7 @@ module.exports = {
     'semi': [2, 'always'],
     'react/require-default-props': 'off',
     'react/jsx-no-target-blank': 'off',
-    'react-hooks/exhaustive-deps': 'off',
+    'react-hooks/exhaustive-deps': 'warn',
     'react/prop-types': 'off',
     'no-unused-vars': 'off',
     'quotes': ['error', 'single', { 'allowTemplateLiterals': true } ],

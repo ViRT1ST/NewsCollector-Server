@@ -17,7 +17,7 @@ export default function LogoutPage() {
 
   useEffect(() => {
     logoutUser();
-  }, []);
+  }, [logoutUser]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -25,7 +25,7 @@ export default function LogoutPage() {
       removeUserState();
       router.push('/page/auth');
     }
-  }, [isSuccess]);
+  }, [isSuccess, router, removeUserState]);
 
   return (
     <PageStructure>

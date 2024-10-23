@@ -28,7 +28,7 @@ export default function PrivateArea({ children }: Props) {
     if (!stateToken && !cookieToken) {
       router.push('/page/auth');
     }
-  }, [stateToken, cookieToken]);
+  }, [stateToken, cookieToken, router]);
 
   if (stateToken) {
     return children;

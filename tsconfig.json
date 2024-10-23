@@ -28,7 +28,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/lib/backend/db/connect.js",
-    "src/lib/postgres/populate/all.js"
-, "src/utils/test.js"  ],
+    "src/lib/postgres/populate/all.js",
+    "src/utils/test.js"
+  ],
   "exclude": ["node_modules"]
 }
